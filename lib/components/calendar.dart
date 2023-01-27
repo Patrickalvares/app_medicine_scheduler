@@ -18,11 +18,13 @@ class _MounthCalendarState extends State<MounthCalendar> {
     Widget weekDaysNameHeader(String weekDayName) {
       return Container(
           decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(12)),
+            color: Colors.black,
+            border: Border.all(color: Colors.black),
+          ),
           child: Center(
               child: Text(weekDayName,
-                  style: const TextStyle(fontWeight: FontWeight.bold))));
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white))));
     }
 
     List<Widget> days = [
@@ -53,26 +55,32 @@ class _MounthCalendarState extends State<MounthCalendar> {
         if (plusOneDay(i) == DateTime.now().day.toString() &&
             dateTime.month == DateTime.now().month &&
             dateTime.year == DateTime.now().year) {
-          days.add(Container(
-              decoration: BoxDecoration(
+          days.add(Padding(
+            padding: const EdgeInsets.all(0.5),
+            child: Container(
+                decoration: BoxDecoration(
                   color: Colors.black,
                   border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12)),
-              child: Center(
-                  child: Text(
-                plusOneDay(i),
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 19,
-                    color: Colors.white),
-              ))));
+                ),
+                child: Center(
+                    child: Text(
+                  plusOneDay(i),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 19,
+                      color: Colors.white),
+                ))),
+          ));
           i++;
         } else {
-          days.add(Container(
-              decoration: BoxDecoration(
+          days.add(Padding(
+            padding: const EdgeInsets.all(0.5),
+            child: Container(
+                decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12)),
-              child: Center(child: Text(plusOneDay(i)))));
+                ),
+                child: Center(child: Text(plusOneDay(i)))),
+          ));
           i++;
         }
       } while (int.parse(plusOneDay(i)) > 1);

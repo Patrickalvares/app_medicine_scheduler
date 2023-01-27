@@ -17,33 +17,63 @@ class _MounthCalendarState extends State<MounthCalendar> {
 
     List<Widget> days = [
       Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: const Center(child: Text("Dom"))),
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(12)),
+          child: const Center(
+              child:
+                  Text("Dom", style: TextStyle(fontWeight: FontWeight.bold)))),
       Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: const Center(child: Text("Seg"))),
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(12)),
+          child: const Center(
+              child:
+                  Text("Seg", style: TextStyle(fontWeight: FontWeight.bold)))),
       Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: const Center(child: Text("Ter"))),
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(12)),
+          child: const Center(
+              child:
+                  Text("Ter", style: TextStyle(fontWeight: FontWeight.bold)))),
       Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: const Center(child: Text("Qua"))),
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(12)),
+          child: const Center(
+              child:
+                  Text("Qua", style: TextStyle(fontWeight: FontWeight.bold)))),
       Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: const Center(child: Text("Qui"))),
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(12)),
+          child: const Center(
+              child:
+                  Text("Qui", style: TextStyle(fontWeight: FontWeight.bold)))),
       Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: const Center(child: Text("Sex"))),
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(12)),
+          child: const Center(
+              child: Text(
+            "Sex",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ))),
       Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: const Center(child: Text("Sab"))),
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(12)),
+          child: const Center(
+              child: Text(
+            "Sab",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ))),
     ];
 
     void emptyDate(int p) {
       for (int i = 0; i < p; i++) {
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
+        days.add(Container());
       }
     }
 
@@ -57,7 +87,9 @@ class _MounthCalendarState extends State<MounthCalendar> {
       int i = 0;
       do {
         days.add(Container(
-            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(12)),
             child: Center(child: Text(plusOneDay(i)))));
         i++;
       } while (int.parse(plusOneDay(i)) > 1);

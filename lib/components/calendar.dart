@@ -7,7 +7,7 @@ class MounthCalendar extends StatefulWidget {
   State<MounthCalendar> createState() => _MounthCalendarState();
 }
 
-DateTime dateTime = DateTime.utc(2023, 07, 01);
+DateTime dateTime = DateTime.utc(2023, 01, 01);
 int targetMonthNumber = 0;
 
 class _MounthCalendarState extends State<MounthCalendar> {
@@ -15,60 +15,24 @@ class _MounthCalendarState extends State<MounthCalendar> {
   Widget build(BuildContext context) {
     String targetMonthName = "";
 
+    Widget weekDaysNameHeader(String weekDayName) {
+      return Container(
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(12)),
+          child: Center(
+              child: Text(weekDayName,
+                  style: const TextStyle(fontWeight: FontWeight.bold))));
+    }
+
     List<Widget> days = [
-      Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(12)),
-          child: const Center(
-              child:
-                  Text("Dom", style: TextStyle(fontWeight: FontWeight.bold)))),
-      Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(12)),
-          child: const Center(
-              child:
-                  Text("Seg", style: TextStyle(fontWeight: FontWeight.bold)))),
-      Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(12)),
-          child: const Center(
-              child:
-                  Text("Ter", style: TextStyle(fontWeight: FontWeight.bold)))),
-      Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(12)),
-          child: const Center(
-              child:
-                  Text("Qua", style: TextStyle(fontWeight: FontWeight.bold)))),
-      Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(12)),
-          child: const Center(
-              child:
-                  Text("Qui", style: TextStyle(fontWeight: FontWeight.bold)))),
-      Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(12)),
-          child: const Center(
-              child: Text(
-            "Sex",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ))),
-      Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(12)),
-          child: const Center(
-              child: Text(
-            "Sab",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ))),
+      weekDaysNameHeader('Dom'),
+      weekDaysNameHeader('Seg'),
+      weekDaysNameHeader('Ter'),
+      weekDaysNameHeader('Qua'),
+      weekDaysNameHeader('Qui'),
+      weekDaysNameHeader('Sex'),
+      weekDaysNameHeader('Sab'),
     ];
 
     void emptyDate(int p) {
@@ -181,7 +145,7 @@ class _MounthCalendarState extends State<MounthCalendar> {
     }
 
     return Container(
-      padding: const EdgeInsets.all(25),
+      padding: const EdgeInsets.only(left: 25, right: 25, top: 5),
       decoration: BoxDecoration(border: Border.all(color: Colors.black)),
       child: Column(
         children: [

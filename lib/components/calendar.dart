@@ -8,12 +8,12 @@ class MounthCalendar extends StatefulWidget {
 }
 
 DateTime dateTime = DateTime.utc(2023, 07, 01);
+int targetMonthNumber = 0;
 
 class _MounthCalendarState extends State<MounthCalendar> {
   @override
   Widget build(BuildContext context) {
     String targetMonthName = "";
-    int targetMonthNumber = dateTime.month;
 
     List<Widget> days = [
       Container(
@@ -39,135 +39,45 @@ class _MounthCalendarState extends State<MounthCalendar> {
           child: const Center(child: Text("Sab"))),
     ];
 
+    void emptyDate(int p) {
+      for (int i = 0; i < p; i++) {
+        days.add(Container(
+          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+        ));
+      }
+    }
+
+    void daysDraw(int position) {
+      emptyDate(position);
+      for (int i = 0; i < 31; i++) {
+        days.add(Container(
+            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+            child:
+                Center(child: Text('${dateTime.add(Duration(days: i)).day}'))));
+      }
+    }
+
     switch (dateTime.weekday) {
       case 7:
-        {
-          for (int i = 0; i < 31; i++) {
-            days.add(Container(
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black)),
-                child: Center(
-                    child: Text('${dateTime.add(Duration(days: i)).day}'))));
-          }
-        }
+        daysDraw(7);
         break;
-
       case 1:
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        for (int i = 0; i < 31; i++) {
-          days.add(Container(
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(
-                  child: Text('${dateTime.add(Duration(days: i)).day}'))));
-        }
+        daysDraw(1);
         break;
       case 2:
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        for (int i = 0; i < 31; i++) {
-          days.add(Container(
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(
-                  child: Text('${dateTime.add(Duration(days: i)).day}'))));
-        }
+        daysDraw(2);
         break;
       case 3:
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        for (int i = 0; i < 31; i++) {
-          days.add(Container(
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(
-                  child: Text('${dateTime.add(Duration(days: i)).day}'))));
-        }
+        daysDraw(3);
         break;
       case 4:
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        for (int i = 0; i < 31; i++) {
-          days.add(Container(
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(
-                  child: Text('${dateTime.add(Duration(days: i)).day}'))));
-        }
+        daysDraw(4);
         break;
       case 5:
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        for (int i = 0; i < 31; i++) {
-          days.add(Container(
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(
-                  child: Text('${dateTime.add(Duration(days: i)).day}'))));
-        }
+        daysDraw(5);
         break;
       case 6:
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        days.add(Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        ));
-        for (int i = 0; i < 31; i++) {
-          days.add(Container(
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(
-                  child: Text('${dateTime.add(Duration(days: i)).day}'))));
-        }
+        daysDraw(6);
         break;
     }
 

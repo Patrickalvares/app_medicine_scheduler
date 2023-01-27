@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
-  initializeDateFormatting('pt_BR').then((_) => runApp(MyApp()));
+  initializeDateFormatting('pt_BR').then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

@@ -18,9 +18,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Remédiando'),
+        title: const Text('Remédiando'),
       ),
-      body: MounthCalendar(),
+      body: const MounthCalendar(),
     );
   }
 }

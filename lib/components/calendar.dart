@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class MounthCalendar extends StatefulWidget {
   const MounthCalendar({super.key});
@@ -9,33 +7,36 @@ class MounthCalendar extends StatefulWidget {
   State<MounthCalendar> createState() => _MounthCalendarState();
 }
 
+DateTime dateTime = DateTime.utc(2023, 07, 01);
+
 class _MounthCalendarState extends State<MounthCalendar> {
   @override
   Widget build(BuildContext context) {
-    int count = 1;
-    DateTime dateTime = DateTime.utc(2023, 03, 01);
+    String targetMonthName = "";
+    int targetMonthNumber = dateTime.month;
+
     List<Widget> days = [
       Container(
           decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: Center(child: Text("Dom"))),
+          child: const Center(child: Text("Dom"))),
       Container(
           decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: Center(child: Text("Seg"))),
+          child: const Center(child: Text("Seg"))),
       Container(
           decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: Center(child: Text("Ter"))),
+          child: const Center(child: Text("Ter"))),
       Container(
           decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: Center(child: Text("Qua"))),
+          child: const Center(child: Text("Qua"))),
       Container(
           decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: Center(child: Text("Qui"))),
+          child: const Center(child: Text("Qui"))),
       Container(
           decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: Center(child: Text("Sex"))),
+          child: const Center(child: Text("Sex"))),
       Container(
           decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: Center(child: Text("Sab"))),
+          child: const Center(child: Text("Sab"))),
     ];
 
     switch (dateTime.weekday) {
@@ -45,7 +46,8 @@ class _MounthCalendarState extends State<MounthCalendar> {
             days.add(Container(
                 decoration:
                     BoxDecoration(border: Border.all(color: Colors.black)),
-                child: Center(child: Text('${dateTime.day + i}'))));
+                child: Center(
+                    child: Text('${dateTime.add(Duration(days: i)).day}'))));
           }
         }
         break;
@@ -58,7 +60,8 @@ class _MounthCalendarState extends State<MounthCalendar> {
           days.add(Container(
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(child: Text('${dateTime.day + i}'))));
+              child: Center(
+                  child: Text('${dateTime.add(Duration(days: i)).day}'))));
         }
         break;
       case 2:
@@ -72,7 +75,8 @@ class _MounthCalendarState extends State<MounthCalendar> {
           days.add(Container(
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(child: Text('${dateTime.day + i}'))));
+              child: Center(
+                  child: Text('${dateTime.add(Duration(days: i)).day}'))));
         }
         break;
       case 3:
@@ -89,7 +93,8 @@ class _MounthCalendarState extends State<MounthCalendar> {
           days.add(Container(
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(child: Text('${dateTime.day + i}'))));
+              child: Center(
+                  child: Text('${dateTime.add(Duration(days: i)).day}'))));
         }
         break;
       case 4:
@@ -109,7 +114,8 @@ class _MounthCalendarState extends State<MounthCalendar> {
           days.add(Container(
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(child: Text('${dateTime.day + i}'))));
+              child: Center(
+                  child: Text('${dateTime.add(Duration(days: i)).day}'))));
         }
         break;
       case 5:
@@ -132,7 +138,8 @@ class _MounthCalendarState extends State<MounthCalendar> {
           days.add(Container(
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(child: Text('${dateTime.day + i}'))));
+              child: Center(
+                  child: Text('${dateTime.add(Duration(days: i)).day}'))));
         }
         break;
       case 6:
@@ -158,18 +165,113 @@ class _MounthCalendarState extends State<MounthCalendar> {
           days.add(Container(
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(child: Text('${dateTime.day + i}'))));
+              child: Center(
+                  child: Text('${dateTime.add(Duration(days: i)).day}'))));
         }
         break;
     }
 
+    switch (dateTime.month) {
+      case 1:
+        targetMonthName = 'Janeiro';
+        break;
+    }
+    switch (dateTime.month) {
+      case 2:
+        targetMonthName = 'Fevereiro';
+        break;
+    }
+    switch (dateTime.month) {
+      case 3:
+        targetMonthName = 'Março';
+        break;
+    }
+    switch (dateTime.month) {
+      case 4:
+        targetMonthName = 'Abril';
+        break;
+    }
+    switch (dateTime.month) {
+      case 5:
+        targetMonthName = 'Maio';
+        break;
+    }
+    switch (dateTime.month) {
+      case 6:
+        targetMonthName = 'Junho';
+        break;
+    }
+    switch (dateTime.month) {
+      case 7:
+        targetMonthName = 'Julho';
+        break;
+    }
+    switch (dateTime.month) {
+      case 8:
+        targetMonthName = 'Agosto';
+        break;
+    }
+    switch (dateTime.month) {
+      case 9:
+        targetMonthName = 'Setembro';
+        break;
+    }
+    switch (dateTime.month) {
+      case 10:
+        targetMonthName = 'Outubro';
+        break;
+    }
+    switch (dateTime.month) {
+      case 11:
+        targetMonthName = 'Novembro';
+        break;
+    }
+    switch (dateTime.month) {
+      case 12:
+        targetMonthName = 'Dezembro';
+        break;
+    }
+
     return Container(
-      padding: EdgeInsets.all(25),
+      padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-      child: GridView.count(
-        primary: false,
-        crossAxisCount: 7,
-        children: days,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                targetMonthName,
+                style: const TextStyle(fontSize: 25),
+              ),
+              Text(
+                '${dateTime.year}',
+                style: const TextStyle(fontSize: 25),
+              ),
+              IconButton(
+                  onPressed: () {
+                    dateTime = DateTime.utc(
+                        dateTime.year, dateTime.month - 1, dateTime.day);
+                    setState(() {});
+                  },
+                  icon: const Icon(Icons.arrow_back_ios_new_sharp)),
+              IconButton(
+                  onPressed: () {
+                    dateTime = DateTime.utc(
+                        dateTime.year, dateTime.month + 1, dateTime.day);
+                    setState(() {});
+                  },
+                  icon: const Icon(Icons.arrow_forward_ios_sharp)),
+            ],
+          ),
+          Flexible(
+            child: GridView.count(
+              primary: false,
+              crossAxisCount: 7,
+              children: days,
+            ),
+          ),
+        ],
       ),
     );
   }

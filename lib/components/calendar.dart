@@ -65,7 +65,7 @@ class _MounthCalendarState extends State<MounthCalendar> {
 
     switch (dateTime.weekday) {
       case 7:
-        daysDraw(7);
+        daysDraw(0);
         break;
       case 1:
         daysDraw(1);

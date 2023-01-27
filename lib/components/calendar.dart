@@ -50,12 +50,31 @@ class _MounthCalendarState extends State<MounthCalendar> {
       emptyDate(position);
       int i = 0;
       do {
-        days.add(Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(12)),
-            child: Center(child: Text(plusOneDay(i)))));
-        i++;
+        if (plusOneDay(i) == DateTime.now().day.toString() &&
+            dateTime.month == DateTime.now().month &&
+            dateTime.year == DateTime.now().year) {
+          days.add(Container(
+              decoration: BoxDecoration(
+                  color: Colors.black,
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(12)),
+              child: Center(
+                  child: Text(
+                plusOneDay(i),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 19,
+                    color: Colors.white),
+              ))));
+          i++;
+        } else {
+          days.add(Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(12)),
+              child: Center(child: Text(plusOneDay(i)))));
+          i++;
+        }
       } while (int.parse(plusOneDay(i)) > 1);
     }
 

@@ -152,28 +152,44 @@ class _MounthCalendarState extends State<MounthCalendar> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                targetMonthName,
-                style: const TextStyle(fontSize: 25),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '$targetMonthName',
+                    style: const TextStyle(fontSize: 25),
+                  ),
+                  Text(
+                    '${dateTime.year}',
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                ],
               ),
-              Text(
-                '${dateTime.year}',
-                style: const TextStyle(fontSize: 25),
+              Row(
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        dateTime = DateTime.utc(
+                            dateTime.year, dateTime.month - 1, dateTime.day);
+                        setState(() {});
+                      },
+                      icon: const Icon(Icons.arrow_back_ios_new_sharp)),
+                  IconButton(
+                      onPressed: () {
+                        dateTime = DateTime.utc(
+                            dateTime.year, dateTime.month + 1, dateTime.day);
+                        setState(() {});
+                      },
+                      icon: const Icon(Icons.arrow_forward_ios_sharp)),
+                  IconButton(
+                      onPressed: () {
+                        dateTime = DateTime.utc(DateTime.now().year,
+                            DateTime.now().month, dateTime.day);
+                        setState(() {});
+                      },
+                      icon: const Icon(Icons.replay_outlined)),
+                ],
               ),
-              IconButton(
-                  onPressed: () {
-                    dateTime = DateTime.utc(
-                        dateTime.year, dateTime.month - 1, dateTime.day);
-                    setState(() {});
-                  },
-                  icon: const Icon(Icons.arrow_back_ios_new_sharp)),
-              IconButton(
-                  onPressed: () {
-                    dateTime = DateTime.utc(
-                        dateTime.year, dateTime.month + 1, dateTime.day);
-                    setState(() {});
-                  },
-                  icon: const Icon(Icons.arrow_forward_ios_sharp)),
             ],
           ),
           Flexible(

@@ -22,7 +22,11 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.transparent,
         title: const Text(
           'Remédiando',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+              color: Colors.black,
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.bold,
+              fontSize: 30),
         ),
       ),
       body: const MounthCalendar(),

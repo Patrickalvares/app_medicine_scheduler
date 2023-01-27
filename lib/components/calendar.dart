@@ -47,14 +47,20 @@ class _MounthCalendarState extends State<MounthCalendar> {
       }
     }
 
+    String plusOneDay(int p) {
+      String newDay = dateTime.add(Duration(days: p)).day.toString();
+      return newDay;
+    }
+
     void daysDraw(int position) {
       emptyDate(position);
-      for (int i = 0; i < 31; i++) {
+      int i = 0;
+      do {
         days.add(Container(
             decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-            child:
-                Center(child: Text('${dateTime.add(Duration(days: i)).day}'))));
-      }
+            child: Center(child: Text(plusOneDay(i)))));
+        i++;
+      } while (int.parse(plusOneDay(i)) > 1);
     }
 
     switch (dateTime.weekday) {

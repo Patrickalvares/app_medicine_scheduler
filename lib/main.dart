@@ -1,9 +1,13 @@
 import 'package:app_medicine_scheduler/pages/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter/services.dart';
 
 void main() {
-  initializeDateFormatting('pt_BR').then((_) => runApp(const MyApp()));
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {

@@ -156,7 +156,7 @@ class _MounthCalendarState extends State<MounthCalendar> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '$targetMonthName',
+                    targetMonthName,
                     style: const TextStyle(fontSize: 25),
                   ),
                   Text(

@@ -20,16 +20,34 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: const Text(
-          'Remédiando',
-          style: TextStyle(
-              color: Colors.black,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
-              fontSize: 30),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              ' Remédiando',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30),
+            ),
+            IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.manage_accounts_rounded,
+                  color: Colors.black,
+                  size: 35,
+                ))
+          ],
         ),
       ),
       body: const MounthCalendar(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Colors.black,
+        child: const Icon(Icons.medication_rounded),
+      ),
     );
   }
 }

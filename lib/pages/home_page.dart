@@ -1,4 +1,5 @@
 import 'package:app_medicine_scheduler/components/calendar.dart';
+import 'package:app_medicine_scheduler/pages/new_medicine.dart';
 import 'package:flutter/material.dart';
 
 import 'package:table_calendar/table_calendar.dart';
@@ -44,7 +45,14 @@ class _HomePageState extends State<HomePage> {
       body: const MounthCalendar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (contextNew) => NewMedicine(),
+            ),
+          );
+        },
         backgroundColor: Colors.black,
         child: const Icon(Icons.medication_rounded),
       ),

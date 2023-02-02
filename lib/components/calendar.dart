@@ -7,169 +7,38 @@ class MounthCalendar extends StatefulWidget {
   State<MounthCalendar> createState() => _MounthCalendarState();
 }
 
-DateTime dateTime = DateTime.utc(2023, 01, 01);
-int targetMonthNumber = 0;
-
 class _MounthCalendarState extends State<MounthCalendar> {
+  DateTime _targetDayTime =
+      DateTime.utc(DateTime.now().year, DateTime.now().month, 01);
   @override
   Widget build(BuildContext context) {
-    String targetMonthName = "";
-
-    Widget weekDaysNameHeader(String weekDayName) {
-      return Container(
-          decoration: BoxDecoration(
-            color: Colors.black,
-            border: Border.all(color: Colors.black),
-          ),
-          child: Center(
-              child: Text(weekDayName,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white))));
-    }
+    String targetMonthName = getMonthName(_targetDayTime.month);
 
     List<Widget> days = [
-      weekDaysNameHeader('Dom'),
-      weekDaysNameHeader('Seg'),
-      weekDaysNameHeader('Ter'),
-      weekDaysNameHeader('Qua'),
-      weekDaysNameHeader('Qui'),
-      weekDaysNameHeader('Sex'),
-      weekDaysNameHeader('Sab'),
+      buildWeekDaysNameHeader('Dom'),
+      buildWeekDaysNameHeader('Seg'),
+      buildWeekDaysNameHeader('Ter'),
+      buildWeekDaysNameHeader('Qua'),
+      buildWeekDaysNameHeader('Qui'),
+      buildWeekDaysNameHeader('Sex'),
+      buildWeekDaysNameHeader('Sab'),
     ];
 
-    void emptyDate(int p) {
-      for (int i = 0; i < p; i++) {
-        days.add(Container());
+    int daysToSkip =
+        (_targetDayTime.weekday == 7) ? 0 : (_targetDayTime.weekday);
+    days.addAll(buildEmptyDates(daysToSkip));
+    int i = 0;
+    do {
+      if (plusOneDay(i) == DateTime.now().day.toString() &&
+          _targetDayTime.month == DateTime.now().month &&
+          _targetDayTime.year == DateTime.now().year) {
+        days.add(buildCurrentDayBlock(i));
+        i++;
+      } else {
+        days.add(buildNotCurrentDayBlock(i));
+        i++;
       }
-    }
-
-    String plusOneDay(int p) {
-      String newDay = dateTime.add(Duration(days: p)).day.toString();
-      return newDay;
-    }
-
-    void daysDraw(int position) {
-      emptyDate(position);
-      int i = 0;
-      do {
-        if (plusOneDay(i) == DateTime.now().day.toString() &&
-            dateTime.month == DateTime.now().month &&
-            dateTime.year == DateTime.now().year) {
-          days.add(Padding(
-            padding: const EdgeInsets.all(0.5),
-            child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: Center(
-                    child: Text(
-                  plusOneDay(i),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 19,
-                      color: Colors.white),
-                ))),
-          ));
-          i++;
-        } else {
-          days.add(Padding(
-            padding: const EdgeInsets.all(0.5),
-            child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: Center(child: Text(plusOneDay(i)))),
-          ));
-          i++;
-        }
-      } while (int.parse(plusOneDay(i)) > 1);
-    }
-
-    switch (dateTime.weekday) {
-      case 7:
-        daysDraw(0);
-        break;
-      case 1:
-        daysDraw(1);
-        break;
-      case 2:
-        daysDraw(2);
-        break;
-      case 3:
-        daysDraw(3);
-        break;
-      case 4:
-        daysDraw(4);
-        break;
-      case 5:
-        daysDraw(5);
-        break;
-      case 6:
-        daysDraw(6);
-        break;
-    }
-
-    switch (dateTime.month) {
-      case 1:
-        targetMonthName = 'Janeiro';
-        break;
-    }
-    switch (dateTime.month) {
-      case 2:
-        targetMonthName = 'Fevereiro';
-        break;
-    }
-    switch (dateTime.month) {
-      case 3:
-        targetMonthName = 'Março';
-        break;
-    }
-    switch (dateTime.month) {
-      case 4:
-        targetMonthName = 'Abril';
-        break;
-    }
-    switch (dateTime.month) {
-      case 5:
-        targetMonthName = 'Maio';
-        break;
-    }
-    switch (dateTime.month) {
-      case 6:
-        targetMonthName = 'Junho';
-        break;
-    }
-    switch (dateTime.month) {
-      case 7:
-        targetMonthName = 'Julho';
-        break;
-    }
-    switch (dateTime.month) {
-      case 8:
-        targetMonthName = 'Agosto';
-        break;
-    }
-    switch (dateTime.month) {
-      case 9:
-        targetMonthName = 'Setembro';
-        break;
-    }
-    switch (dateTime.month) {
-      case 10:
-        targetMonthName = 'Outubro';
-        break;
-    }
-    switch (dateTime.month) {
-      case 11:
-        targetMonthName = 'Novembro';
-        break;
-    }
-    switch (dateTime.month) {
-      case 12:
-        targetMonthName = 'Dezembro';
-        break;
-    }
+    } while (int.parse(plusOneDay(i)) > 1);
 
     return Container(
       padding: const EdgeInsets.only(left: 25, right: 25, top: 5),
@@ -187,7 +56,7 @@ class _MounthCalendarState extends State<MounthCalendar> {
                     style: const TextStyle(fontSize: 25),
                   ),
                   Text(
-                    '${dateTime.year}',
+                    '${_targetDayTime.year}',
                     style: const TextStyle(fontSize: 13),
                   ),
                 ],
@@ -196,22 +65,22 @@ class _MounthCalendarState extends State<MounthCalendar> {
                 children: [
                   IconButton(
                       onPressed: () {
-                        dateTime = DateTime.utc(
-                            dateTime.year, dateTime.month - 1, dateTime.day);
+                        _targetDayTime = DateTime.utc(_targetDayTime.year,
+                            _targetDayTime.month - 1, _targetDayTime.day);
                         setState(() {});
                       },
                       icon: const Icon(Icons.arrow_back_ios_new_sharp)),
                   IconButton(
                       onPressed: () {
-                        dateTime = DateTime.utc(
-                            dateTime.year, dateTime.month + 1, dateTime.day);
+                        _targetDayTime = DateTime.utc(_targetDayTime.year,
+                            _targetDayTime.month + 1, _targetDayTime.day);
                         setState(() {});
                       },
                       icon: const Icon(Icons.arrow_forward_ios_sharp)),
                   IconButton(
                       onPressed: () {
-                        dateTime = DateTime.utc(DateTime.now().year,
-                            DateTime.now().month, dateTime.day);
+                        _targetDayTime = DateTime.utc(DateTime.now().year,
+                            DateTime.now().month, _targetDayTime.day);
                         setState(() {});
                       },
                       icon: const Icon(Icons.replay_outlined)),
@@ -229,5 +98,101 @@ class _MounthCalendarState extends State<MounthCalendar> {
         ],
       ),
     );
+  }
+
+  Widget buildWeekDaysNameHeader(String weekDayName) {
+    return Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          border: Border.all(color: Colors.black),
+        ),
+        child: Center(
+            child: Text(weekDayName,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.white))));
+  }
+
+  List<Widget> buildEmptyDates(int p) {
+    List<Widget> ret = [];
+    for (int i = 0; i < p; i++) {
+      ret.add(Container());
+    }
+    return ret;
+  }
+
+  String plusOneDay(int p) {
+    String newDay = _targetDayTime.add(Duration(days: p)).day.toString();
+    return newDay;
+  }
+
+  Widget buildCurrentDayBlock(int day) {
+    return Padding(
+      padding: const EdgeInsets.all(0.5),
+      child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black,
+            border: Border.all(color: Colors.grey),
+          ),
+          child: Center(
+              child: Text(plusOneDay(day),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 19,
+                      color: Colors.white)))),
+    );
+  }
+
+  Widget buildNotCurrentDayBlock(int day) {
+    return Padding(
+      padding: const EdgeInsets.all(0.5),
+      child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+          ),
+          child: Center(child: Text(plusOneDay(day)))),
+    );
+  }
+
+  String getMonthName(int month) {
+    String name = '';
+    switch (month) {
+      case 1:
+        name = 'Janeiro';
+        break;
+      case 2:
+        name = 'Fevereiro';
+        break;
+      case 3:
+        name = 'Março';
+        break;
+      case 4:
+        name = 'Abril';
+        break;
+      case 5:
+        name = 'Maio';
+        break;
+      case 6:
+        name = 'Junho';
+        break;
+      case 7:
+        name = 'Julho';
+        break;
+      case 8:
+        name = 'Agosto';
+        break;
+      case 9:
+        name = 'Setembro';
+        break;
+      case 10:
+        name = 'Outubro';
+        break;
+      case 11:
+        name = 'Novembro';
+        break;
+      case 12:
+        name = 'Dezembro';
+        break;
+    }
+    return name;
   }
 }

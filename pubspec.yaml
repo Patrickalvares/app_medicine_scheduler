@@ -38,7 +38,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   table_calendar: ^3.0.9
   intl: ^0.18.0
-  bloc: ^8.1.0
+  flutter_bloc: ^8.1.1
+  
 
 dev_dependencies:
   flutter_test:

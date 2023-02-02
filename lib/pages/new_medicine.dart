@@ -1,4 +1,8 @@
+import 'package:app_medicine_scheduler/bloc/medicine_bloc.dart';
+import 'package:app_medicine_scheduler/bloc/medicine_event.dart';
+import 'package:app_medicine_scheduler/models/medicine.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NewMedicine extends StatefulWidget {
   const NewMedicine({super.key});
@@ -47,17 +51,36 @@ class _NewMedicineState extends State<NewMedicine> {
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 8.0, right: 8, top: 3, bottom: 3),
+              padding: const EdgeInsets.only(
+                  left: 8.0, right: 8, top: 3, bottom: 20),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(),
                 ),
                 child: TextFormField(
-                  style: TextStyle(fontSize: 25),
+                  style: const TextStyle(fontSize: 25),
                 ),
               ),
             ),
+            Center(
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  Medicine medicine =
+                      Medicine('Test', DateTime.now(), RecurrenceType.daily);
+                  BlocProvider.of<MedicineBloc>(context)
+                      .add(AddMedicineEvent(medicine));
+                },
+                label: Padding(
+                  padding: const EdgeInsets.only(left: 25, right: 25),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.save),
+                      Text(' Salvar'),
+                    ],
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),

@@ -1,6 +1,10 @@
+import 'package:app_medicine_scheduler/bloc/medicine_bloc.dart';
+import 'package:app_medicine_scheduler/bloc/medicine_state.dart';
 import 'package:app_medicine_scheduler/components/calendar.dart';
+import 'package:app_medicine_scheduler/models/medicine.dart';
 import 'package:app_medicine_scheduler/pages/new_medicine.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:table_calendar/table_calendar.dart';
 
@@ -42,14 +46,45 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: const MounthCalendar(),
+      body: Column(
+        children: [
+          Flexible(child: const MounthCalendar()),
+          BlocBuilder(
+              bloc: BlocProvider.of<MedicineBloc>(context),
+              builder: (context, state) {
+                if (state is MedicineEmptyState) {
+                  return Text('Não há Remédios');
+                } else if (state is MedicineLoadedState) {
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: state.medicines.length,
+                      itemBuilder: ((context, index) {
+                        Medicine medicine = state.medicines[index];
+                        return Row(
+                          children: [
+                            Text(medicine.name),
+                            Text(medicine.initialDate.toString()),
+                            Text((medicine.active
+                                ? "O remédio está ativo"
+                                : "PAi tá off"))
+                          ],
+                        );
+                      }),
+                    ),
+                  );
+                } else {
+                  return Text("Erro doido");
+                }
+              })
+        ],
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (contextNew) => NewMedicine(),
+              builder: (contextNew) => const NewMedicine(),
             ),
           );
         },

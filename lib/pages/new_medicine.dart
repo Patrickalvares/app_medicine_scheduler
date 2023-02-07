@@ -1,8 +1,4 @@
-import 'package:app_medicine_scheduler/bloc/medicine_bloc.dart';
-import 'package:app_medicine_scheduler/bloc/medicine_event.dart';
-import 'package:app_medicine_scheduler/models/medicine.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NewMedicine extends StatefulWidget {
   const NewMedicine({super.key});
@@ -13,12 +9,12 @@ class NewMedicine extends StatefulWidget {
 
 class _NewMedicineState extends State<NewMedicine> {
   final dropDownItems = [
-    'Diariamente',
-    'Semanalmente',
-    'Mensalmente',
-    'A cada X dias',
-    'A cada X horas',
-    'Horários Especificos',
+    ' Diariamente',
+    ' Semanalmente',
+    ' Mensalmente',
+    ' A cada X dias',
+    ' A cada X horas',
+    ' Horários Especificos',
   ];
 
   String? value;
@@ -76,21 +72,46 @@ class _NewMedicineState extends State<NewMedicine> {
                   border: Border.all(),
                 ),
                 child: TextFormField(
-                  style: const TextStyle(fontSize: 25),
+                  style: const TextStyle(fontSize: 22),
                 ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 8.0),
+              child: Text('Qual a frequência de uso?',
+                  style: TextStyle(fontSize: 18)),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 8.0, right: 8, top: 3, bottom: 20),
+              child: Container(
+                decoration:
+                    BoxDecoration(border: Border.all(style: BorderStyle.solid)),
+                child: DropdownButton<String>(
+                  underline: const SizedBox(),
+                  items: dropDownItems.map(buildMenuItem).toList(),
+                  onChanged: ((value) => setState(() => this.value = value)),
+                  value: value,
+                  isExpanded: true,
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 8.0),
+              child: Text(
+                'Observação:',
+                style: TextStyle(fontSize: 18),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(
                   left: 8.0, right: 8, top: 3, bottom: 20),
-              child: DropdownButton<String>(
-                items: dropDownItems.map(buildMenuItem).toList(),
-                onChanged: ((value) => setState(() => this.value = value)),
-                value: value,
-                isExpanded: true,
-                hint: Text(
-                  'Qual a Frequência de uso?',
-                  style: const TextStyle(fontSize: 25),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                ),
+                child: TextFormField(
+                  style: const TextStyle(fontSize: 22),
                 ),
               ),
             ),

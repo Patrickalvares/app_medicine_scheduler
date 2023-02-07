@@ -12,6 +12,24 @@ class NewMedicine extends StatefulWidget {
 }
 
 class _NewMedicineState extends State<NewMedicine> {
+  final dropDownItems = [
+    'Diariamente',
+    'Semanalmente',
+    'Mensalmente',
+    'A cada X dias',
+    'A cada X horas',
+    'Horários Especificos',
+  ];
+
+  String? value;
+
+  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+          style: const TextStyle(fontSize: 25),
+        ),
+      );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,19 +80,32 @@ class _NewMedicineState extends State<NewMedicine> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 8.0, right: 8, top: 3, bottom: 20),
+              child: DropdownButton<String>(
+                items: dropDownItems.map(buildMenuItem).toList(),
+                onChanged: ((value) => setState(() => this.value = value)),
+                value: value,
+                isExpanded: true,
+                hint: Text(
+                  'Qual a Frequência de uso?',
+                  style: const TextStyle(fontSize: 25),
+                ),
+              ),
+            ),
             Center(
               child: FloatingActionButton.extended(
-                onPressed: () {
-                  Medicine medicine =
-                      Medicine('Test', DateTime.now(), RecurrenceType.daily);
-                  BlocProvider.of<MedicineBloc>(context)
-                      .add(AddMedicineEvent(medicine));
-                },
+                backgroundColor: Colors.black,
+                onPressed: () {},
                 label: Padding(
                   padding: const EdgeInsets.only(left: 25, right: 25),
                   child: Row(
                     children: const [
-                      Icon(Icons.save),
+                      Icon(
+                        Icons.save,
+                        color: Colors.white,
+                      ),
                       Text(' Salvar'),
                     ],
                   ),

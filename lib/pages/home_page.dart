@@ -48,12 +48,12 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          Flexible(child: const MounthCalendar()),
+          const Flexible(child: MounthCalendar()),
           BlocBuilder(
               bloc: BlocProvider.of<MedicineBloc>(context),
               builder: (context, state) {
                 if (state is MedicineEmptyState) {
-                  return Text('Não há Remédios');
+                  return const Text('Não há Remédios');
                 } else if (state is MedicineLoadedState) {
                   return Expanded(
                     child: ListView.builder(
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                 } else {
-                  return Text("Erro doido");
+                  return const Text("Erro doido");
                 }
               })
         ],

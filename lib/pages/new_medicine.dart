@@ -67,38 +67,32 @@ class _NewMedicineState extends State<NewMedicine> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 8.0),
-                child: Text(
-                  'Nome do Medicamento:',
-                  style: TextStyle(fontSize: 18),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 8.0, right: 8, top: 3, bottom: 20),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                      label: Text('Nome do Medicamento'),
+                      border: OutlineInputBorder()),
+                  controller: _medicineName,
+                  style: const TextStyle(fontSize: 22),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 8.0, right: 8, top: 3, bottom: 20),
                 child: Container(
+                  alignment: Alignment.center,
+                  height: 65,
                   decoration: BoxDecoration(
-                    border: Border.all(),
-                  ),
-                  child: TextFormField(
-                    controller: _medicineName,
-                    style: const TextStyle(fontSize: 22),
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 8.0),
-                child: Text('Qual a frequência de uso?',
-                    style: TextStyle(fontSize: 18)),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 8.0, right: 8, top: 3, bottom: 20),
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(style: BorderStyle.solid)),
-                  child: DropdownButtonFormField<String>(
+                      border: Border.all(color: Colors.grey.shade500),
+                      borderRadius: BorderRadius.circular(4)),
+                  child: DropdownButton<String>(
+                    underline: SizedBox(),
+                    hint: const Text(
+                      '  Qual a frequência de uso?',
+                      style: TextStyle(fontSize: 22),
+                    ),
                     items: dropDownItems.map(buildMenuItem).toList(),
                     onChanged: ((value) =>
                         setState(() => recurrenceTypevalue = value)),
@@ -107,24 +101,14 @@ class _NewMedicineState extends State<NewMedicine> {
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 8.0),
-                child: Text(
-                  'Observação:',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 8.0, right: 8, top: 3, bottom: 20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                  ),
-                  child: TextFormField(
-                    controller: _medicineObservation,
-                    style: const TextStyle(fontSize: 22),
-                  ),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                      label: Text('Observação'), border: OutlineInputBorder()),
+                  controller: _medicineObservation,
+                  style: const TextStyle(fontSize: 22),
                 ),
               ),
               Center(

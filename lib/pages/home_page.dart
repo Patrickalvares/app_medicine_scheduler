@@ -60,10 +60,26 @@ class _HomePageState extends State<HomePage> {
                       itemCount: state.medicines.length,
                       itemBuilder: ((context, index) {
                         Medicine medicine = state.medicines[index];
+                        if (medicine is PeriodicMedicine) {
+                          return Row(
+                            children: [
+                              Text(medicine.name),
+                              Text(
+                                "${medicine.initialDate.day}/${medicine.initialDate.month}/${medicine.initialDate.year}",
+                              ),
+                              Text((medicine.active
+                                  ? "O remédio está ativo"
+                                  : "PAi tá off")),
+                              Text(medicine.period.inHours.toString())
+                            ],
+                          );
+                        }
                         return Row(
                           children: [
                             Text(medicine.name),
-                            Text(medicine.initialDate.toString()),
+                            Text(
+                              "${medicine.initialDate.day}/${medicine.initialDate.month}/${medicine.initialDate.year}",
+                            ),
                             Text((medicine.active
                                 ? "O remédio está ativo"
                                 : "PAi tá off"))

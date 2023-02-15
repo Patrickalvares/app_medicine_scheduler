@@ -1,6 +1,7 @@
 import 'package:app_medicine_scheduler/bloc/medicine_bloc.dart';
 import 'package:app_medicine_scheduler/bloc/medicine_state.dart';
 import 'package:app_medicine_scheduler/components/calendar.dart';
+import 'package:app_medicine_scheduler/components/medicine_preview.dart';
 import 'package:app_medicine_scheduler/models/medicine.dart';
 import 'package:app_medicine_scheduler/pages/new_medicine.dart';
 import 'package:flutter/material.dart';
@@ -61,30 +62,10 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: ((context, index) {
                         Medicine medicine = state.medicines[index];
                         if (medicine is PeriodicMedicine) {
-                          return Row(
-                            children: [
-                              Text(medicine.name),
-                              Text(
-                                "${medicine.initialDate.day}/${medicine.initialDate.month}/${medicine.initialDate.year}",
-                              ),
-                              Text((medicine.active
-                                  ? "O remédio está ativo"
-                                  : "PAi tá off")),
-                              Text(medicine.period.inHours.toString())
-                            ],
-                          );
+                          return periodicMedicinePreview(medicine);
+                        } else {
+                          return standartMedicinePreview(medicine);
                         }
-                        return Row(
-                          children: [
-                            Text(medicine.name),
-                            Text(
-                              "${medicine.initialDate.day}/${medicine.initialDate.month}/${medicine.initialDate.year}",
-                            ),
-                            Text((medicine.active
-                                ? "O remédio está ativo"
-                                : "PAi tá off"))
-                          ],
-                        );
                       }),
                     ),
                   );

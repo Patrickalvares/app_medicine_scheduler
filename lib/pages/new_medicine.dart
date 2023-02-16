@@ -74,6 +74,12 @@ class _NewMedicineState extends State<NewMedicine> {
                 padding: const EdgeInsets.only(
                     left: 8.0, right: 8, top: 3, bottom: 20),
                 child: TextFormField(
+                  maxLength: 40,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Insira um Nome";
+                    }
+                  },
                   decoration: const InputDecoration(
                       label: Text('Nome do Medicamento'),
                       border: OutlineInputBorder()),
@@ -84,24 +90,25 @@ class _NewMedicineState extends State<NewMedicine> {
               Padding(
                 padding: const EdgeInsets.only(
                     left: 8.0, right: 8, top: 3, bottom: 20),
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 65,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade500),
-                      borderRadius: BorderRadius.circular(4)),
-                  child: DropdownButton<String>(
-                    underline: const SizedBox(),
-                    hint: const Text(
-                      '  Qual a frequência de uso?',
-                      style: TextStyle(fontSize: 22),
-                    ),
-                    items: dropDownItems.map(buildMenuItem).toList(),
-                    onChanged: ((value) =>
-                        setState(() => _recurrenceTypevalue = value)),
-                    value: _recurrenceTypevalue,
-                    isExpanded: true,
+                child: DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4)),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Escolha a Frequência';
+                    }
+                  },
+                  hint: const Text(
+                    '  Qual a frequência de uso?',
+                    style: TextStyle(fontSize: 22),
+                  ),
+                  items: dropDownItems.map(buildMenuItem).toList(),
+                  onChanged: ((value) =>
+                      setState(() => _recurrenceTypevalue = value)),
+                  value: _recurrenceTypevalue,
+                  isExpanded: true,
                 ),
               ),
               Visibility(
@@ -129,6 +136,9 @@ class _NewMedicineState extends State<NewMedicine> {
               Visibility(
                   visible: (_recurrenceTypevalue == ' A cada __ horas'),
                   child: TimePickerSpinner(
+                    isForce2Digits: true,
+                    time: DateTime(0, 0, 0, 12, 0),
+                    minutesInterval: 5,
                     onTimeChange: (time) {
                       setState(() {
                         _timeInHours = time;
@@ -139,6 +149,7 @@ class _NewMedicineState extends State<NewMedicine> {
                 padding: const EdgeInsets.only(
                     left: 8.0, right: 8, top: 3, bottom: 20),
                 child: TextFormField(
+                  maxLength: 200,
                   decoration: const InputDecoration(
                       label: Text('Observação'), border: OutlineInputBorder()),
                   controller: _medicineObservation,
@@ -155,19 +166,22 @@ class _NewMedicineState extends State<NewMedicine> {
                         case ' Diariamente':
                           {
                             medicine = DailyMedicine(
-                                _medicineName.text, DateTime.now());
+                                _medicineName.text, DateTime.now(),
+                                observation: _medicineObservation.text);
                             break;
                           }
                         case ' Semanalmente':
                           {
                             medicine = WeeklyMedicine(
-                                _medicineName.text, DateTime.now());
+                                _medicineName.text, DateTime.now(),
+                                observation: _medicineObservation.text);
                             break;
                           }
                         case ' Mensalmente':
                           {
                             medicine = MonthlyMedicine(
-                                _medicineName.text, DateTime.now());
+                                _medicineName.text, DateTime.now(),
+                                observation: _medicineObservation.text);
                             break;
                           }
                         case ' A cada __ dias':
@@ -177,7 +191,8 @@ class _NewMedicineState extends State<NewMedicine> {
                                 DateTime.now(),
                                 Duration(
                                   days: int.parse(_periodicMedicineDays.text),
-                                ));
+                                ),
+                                observation: _medicineObservation.text);
                             break;
                           }
                         case ' A cada __ horas':
@@ -187,7 +202,8 @@ class _NewMedicineState extends State<NewMedicine> {
                                 DateTime.now(),
                                 Duration(
                                     hours: _timeInHours.hour,
-                                    minutes: _timeInHours.minute));
+                                    minutes: _timeInHours.minute),
+                                observation: _medicineObservation.text);
                             break;
                           }
                         default:

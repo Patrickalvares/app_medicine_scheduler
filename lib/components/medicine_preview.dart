@@ -1,7 +1,7 @@
 import 'package:app_medicine_scheduler/models/medicine.dart';
 import 'package:flutter/material.dart';
 
-Widget periodicMedicinePreview(medicine) {
+Widget periodicMedicinePreview(PeriodicMedicine medicine) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
@@ -25,6 +25,7 @@ Widget periodicMedicinePreview(medicine) {
               children: [
                 Text('${medicine.period.inHours.toString()} Horas'),
                 Text('${medicine.period.inDays.toString()} Dias'),
+                Text(medicine.observation ?? ""),
               ],
             )
           ],
@@ -51,6 +52,7 @@ Widget standartMedicinePreview(medicine) {
                 Text(
                   "${medicine.initialDate.day}/${medicine.initialDate.month}/${medicine.initialDate.year}",
                 ),
+                Text(medicine.observation ?? ""),
               ],
             ),
             Text((medicine.active ? "Ativo" : "Inativo")),

@@ -4,6 +4,7 @@ import 'package:app_medicine_scheduler/models/medicine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
+import 'package:intl/intl.dart';
 
 class NewMedicine extends StatefulWidget {
   const NewMedicine({super.key});
@@ -17,7 +18,7 @@ class _NewMedicineState extends State<NewMedicine> {
   final TextEditingController _medicineName = TextEditingController();
   final TextEditingController _medicineObservation = TextEditingController();
   final TextEditingController _periodicMedicineDays = TextEditingController();
-
+  final TextEditingController _initialDate = TextEditingController();
   static const List<String> dropDownItems = [
     ' Diariamente',
     ' Semanalmente',
@@ -25,6 +26,29 @@ class _NewMedicineState extends State<NewMedicine> {
     ' A cada __ dias',
     ' A cada __ horas',
   ];
+
+  Future _openInitialDatePicker() async {
+    DateTime? date = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2999));
+    if (date == null) {
+      return;
+    }
+    TimeOfDay? time = await showTimePicker(
+        context: context,
+        initialTime: const TimeOfDay(hour: 18, minute: 0),
+        initialEntryMode: TimePickerEntryMode.input);
+    if (time == null) {
+      return;
+    }
+    String dateString =
+        '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+    String timeString =
+        '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+    _initialDate.text = '$dateString $timeString';
+  }
 
   String? _recurrenceTypevalue;
   late DateTime _timeInHours;
@@ -147,6 +171,10 @@ class _NewMedicineState extends State<NewMedicine> {
                       });
                     },
                   )),
+              TextFormField(
+                onTap: _openInitialDatePicker,
+                controller: _initialDate,
+              ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 8.0, right: 8, top: 3, bottom: 20),
@@ -168,21 +196,27 @@ class _NewMedicineState extends State<NewMedicine> {
                         case ' Diariamente':
                           {
                             medicine = DailyMedicine(
-                                _medicineName.text, DateTime.now(),
+                                _medicineName.text,
+                                DateFormat('dd/MM/y H:m')
+                                    .parse(_initialDate.text),
                                 observation: _medicineObservation.text);
                             break;
                           }
                         case ' Semanalmente':
                           {
                             medicine = WeeklyMedicine(
-                                _medicineName.text, DateTime.now(),
+                                _medicineName.text,
+                                DateFormat('dd/MM/y H:m')
+                                    .parse(_initialDate.text),
                                 observation: _medicineObservation.text);
                             break;
                           }
                         case ' Mensalmente':
                           {
                             medicine = MonthlyMedicine(
-                                _medicineName.text, DateTime.now(),
+                                _medicineName.text,
+                                DateFormat('dd/MM/y H:m')
+                                    .parse(_initialDate.text),
                                 observation: _medicineObservation.text);
                             break;
                           }

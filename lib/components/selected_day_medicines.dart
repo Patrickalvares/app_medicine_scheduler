@@ -1,12 +1,12 @@
 import 'package:app_medicine_scheduler/bloc/medicine_bloc.dart';
 import 'package:app_medicine_scheduler/bloc/medicine_state.dart';
-import 'package:app_medicine_scheduler/components/medicine_preview.dart';
 import 'package:app_medicine_scheduler/models/medicine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectedDayMedicines extends StatefulWidget {
-  const SelectedDayMedicines({super.key});
+  final DateTime selectedDay;
+  const SelectedDayMedicines({super.key, required this.selectedDay});
 
   @override
   State<SelectedDayMedicines> createState() => _SelectedDayMedicinesState();
@@ -20,13 +20,24 @@ class MedicineSchedule {
 }
 
 class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
-  late DateTime selectedDay;
-
   @override
   void initState() {
-    selectedDay = DateTime.now();
-
     super.initState();
+  }
+
+  bool checkLastMonthDayOverflow(Medicine medicine) {
+    if (medicine.initialDate.day >
+            DateTime.utc(
+                    widget.selectedDay.year, widget.selectedDay.month + 1, 0)
+                .day &&
+        widget.selectedDay.day ==
+            DateTime.utc(
+                    widget.selectedDay.year, widget.selectedDay.month + 1, 0)
+                .day) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -39,18 +50,18 @@ class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
           } else if (state is MedicineLoadedState) {
             List<MedicineSchedule> schedules = [];
 
-            for (int i = 0; i < state.medicines.length; i++) {
-              var medicine = state.medicines[i];
-            }
-
             for (var medicine in state.medicines) {
               if ((medicine is DailyMedicine) ||
                   (medicine is WeeklyMedicine &&
-                      medicine.initialDate.weekday == selectedDay.weekday)) {
+                      medicine.initialDate.weekday ==
+                          widget.selectedDay.weekday) ||
+                  (medicine is MonthlyMedicine &&
+                      (medicine.initialDate.day == widget.selectedDay.day ||
+                          checkLastMonthDayOverflow(medicine)))) {
                 DateTime day = DateTime.utc(
-                    selectedDay.year,
-                    selectedDay.month,
-                    selectedDay.day,
+                    widget.selectedDay.year,
+                    widget.selectedDay.month,
+                    widget.selectedDay.day,
                     medicine.initialDate.hour,
                     medicine.initialDate.minute);
                 schedules.add(MedicineSchedule(day, medicine));
@@ -65,7 +76,7 @@ class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
                   return Column(children: [
                     Text(
                         "${medicine.medicineTime.hour}:${medicine.medicineTime.minute}"),
-                    Text("${medicine.medicine.name}")
+                    Text(medicine.medicine.name)
                   ]);
                   // if (medicine is PeriodicMedicine) {
                   //   return periodicMedicinePreview(medicine);

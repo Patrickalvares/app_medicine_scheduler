@@ -1,4 +1,7 @@
+import 'package:app_medicine_scheduler/bloc/select_day_bloc.dart';
+import 'package:app_medicine_scheduler/bloc/select_day_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MounthCalendar extends StatefulWidget {
   const MounthCalendar({super.key});
@@ -10,6 +13,8 @@ class MounthCalendar extends StatefulWidget {
 class _MounthCalendarState extends State<MounthCalendar> {
   DateTime _targetDayTime =
       DateTime.utc(DateTime.now().year, DateTime.now().month, 01);
+  late DateTime selectDay = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     String targetMonthName = getMonthName(_targetDayTime.month);
@@ -29,7 +34,12 @@ class _MounthCalendarState extends State<MounthCalendar> {
     days.addAll(buildEmptyDates(daysToSkip));
     int i = 0;
     do {
-      if (plusOneDay(i) == DateTime.now().day.toString() &&
+      if (plusOneDay(i) == selectDay.day.toString() &&
+          _targetDayTime.month == selectDay.month &&
+          _targetDayTime.year == selectDay.year) {
+        days.add(buildSelectDayBlock(i));
+        i++;
+      } else if (plusOneDay(i) == DateTime.now().day.toString() &&
           _targetDayTime.month == DateTime.now().month &&
           _targetDayTime.year == DateTime.now().year) {
         days.add(buildCurrentDayBlock(i));
@@ -41,7 +51,7 @@ class _MounthCalendarState extends State<MounthCalendar> {
     } while (int.parse(plusOneDay(i)) > 1);
 
     return Container(
-      padding: const EdgeInsets.only(left: 25, right: 25, top: 5),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
       decoration: BoxDecoration(border: Border.all(color: Colors.black)),
       child: Column(
         children: [
@@ -128,28 +138,68 @@ class _MounthCalendarState extends State<MounthCalendar> {
   Widget buildCurrentDayBlock(int day) {
     return Padding(
       padding: const EdgeInsets.all(0.5),
-      child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black,
-            border: Border.all(color: Colors.grey),
-          ),
-          child: Center(
-              child: Text(plusOneDay(day),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 19,
-                      color: Colors.white)))),
+      child: InkWell(
+        onTap: () {
+          BlocProvider.of<SelectDayBloc>(context).add(UpdateSelectDay(
+              DateTime.utc(
+                  _targetDayTime.year, _targetDayTime.month, day + 1)));
+          setState(() {
+            selectDay = DateTime.utc(
+                _targetDayTime.year, _targetDayTime.month, day + 1);
+          });
+        },
+        child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[600],
+              border: Border.all(color: Colors.grey),
+            ),
+            child: Center(
+                child: Text(plusOneDay(day),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 19,
+                        color: Colors.white)))),
+      ),
+    );
+  }
+
+  Widget buildSelectDayBlock(int day) {
+    return Padding(
+      padding: const EdgeInsets.all(0.5),
+      child: InkWell(
+        child: Container(
+            decoration: BoxDecoration(
+              color: Colors.black,
+              border: Border.all(color: Colors.grey),
+            ),
+            child: Center(
+                child: Text(plusOneDay(day),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 19,
+                        color: Colors.white)))),
+      ),
     );
   }
 
   Widget buildNotCurrentDayBlock(int day) {
-    return Padding(
-      padding: const EdgeInsets.all(0.5),
-      child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-          ),
-          child: Center(child: Text(plusOneDay(day)))),
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<SelectDayBloc>(context).add(UpdateSelectDay(
+            DateTime.utc(_targetDayTime.year, _targetDayTime.month, day + 1)));
+        setState(() {
+          selectDay =
+              DateTime.utc(_targetDayTime.year, _targetDayTime.month, day + 1);
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(0.5),
+        child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+            ),
+            child: Center(child: Text(plusOneDay(day)))),
+      ),
     );
   }
 

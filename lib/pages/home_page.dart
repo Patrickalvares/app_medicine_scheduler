@@ -1,14 +1,15 @@
 import 'package:app_medicine_scheduler/bloc/medicine_bloc.dart';
 import 'package:app_medicine_scheduler/bloc/medicine_event.dart';
-import 'package:app_medicine_scheduler/bloc/medicine_state.dart';
+import 'package:app_medicine_scheduler/bloc/select_day_state.dart';
 import 'package:app_medicine_scheduler/components/calendar.dart';
-import 'package:app_medicine_scheduler/components/medicine_preview.dart';
 import 'package:app_medicine_scheduler/components/selected_day_medicines.dart';
 import 'package:app_medicine_scheduler/models/medicine.dart';
 import 'package:app_medicine_scheduler/pages/new_medicine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../bloc/select_day_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,8 +23,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<MedicineBloc>(context).add(AddMedicineEvent(DailyMedicine(
-        'Viagra', DateTime.utc(2023, 02, 05, 22, 15),
+    BlocProvider.of<MedicineBloc>(context).add(AddMedicineEvent(MonthlyMedicine(
+        'Viagra', DateTime.utc(2023, 03, 31, 22, 15),
         observation: 'Azulzinho')));
     BlocProvider.of<MedicineBloc>(context).add(AddMedicineEvent(DailyMedicine(
         'Tilenol', DateTime.utc(2023, 02, 07, 21, 15),
@@ -69,32 +70,20 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Column(
-        children: const [
-          Flexible(child: MounthCalendar()),
-          SelectedDayMedicines()
-          // BlocBuilder(
-          //     bloc: BlocProvider.of<MedicineBloc>(context),
-          //     builder: (context, state) {
-          //       if (state is MedicineEmptyState) {
-          //         return const Text('Não há Remédios');
-          //       } else if (state is MedicineLoadedState) {
-          //         return Expanded(
-          //           child: ListView.builder(
-          //             itemCount: state.medicines.length,
-          //             itemBuilder: ((context, index) {
-          //               Medicine medicine = state.medicines[index];
-          //               if (medicine is PeriodicMedicine) {
-          //                 return periodicMedicinePreview(medicine);
-          //               } else {
-          //                 return standartMedicinePreview(medicine);
-          //               }
-          //             }),
-          //           ),
-          //         );
-          //       } else {
-          //         return const Text("Erro doido");
-          //       }
-          //     })
+        children: [
+          const Flexible(child: MounthCalendar()),
+          BlocBuilder(
+            bloc: BlocProvider.of<SelectDayBloc>(context),
+            builder: (context, state) {
+              if (state is SelectDayLoadedState) {
+                return SelectedDayMedicines(
+                  selectedDay: state.selectDay,
+                );
+              } else {
+                return const SizedBox();
+              }
+            },
+          )
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

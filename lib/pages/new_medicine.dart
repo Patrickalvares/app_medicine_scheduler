@@ -27,7 +27,6 @@ class _NewMedicineState extends State<NewMedicine> {
   ];
 
   String? _recurrenceTypevalue;
-  String? _medicineFrequencyType;
   late DateTime _timeInHours;
 
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
@@ -78,6 +77,8 @@ class _NewMedicineState extends State<NewMedicine> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Insira um Nome";
+                    } else {
+                      return null;
                     }
                   },
                   decoration: const InputDecoration(
@@ -99,6 +100,7 @@ class _NewMedicineState extends State<NewMedicine> {
                     if (value == null || value.isEmpty) {
                       return 'Escolha a Frequência';
                     }
+                    return null;
                   },
                   hint: const Text(
                     '  Qual a frequência de uso?',

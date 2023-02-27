@@ -73,16 +73,31 @@ class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
                 itemCount: schedules.length,
                 itemBuilder: ((context, index) {
                   MedicineSchedule medicine = schedules[index];
-                  return Column(children: [
-                    Text(
-                        "${medicine.medicineTime.hour}:${medicine.medicineTime.minute}"),
-                    Text(medicine.medicine.name)
-                  ]);
-                  // if (medicine is PeriodicMedicine) {
-                  //   return periodicMedicinePreview(medicine);
-                  // } else {
-                  //   return standartMedicinePreview(medicine);
-                  // }
+                  return Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: 5, top: 5, left: 10, right: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(medicine.medicine.name),
+                                  Text(medicine.medicine.observation.toString())
+                                ]),
+                            Text(
+                                "${medicine.medicine.periodicKind} ${medicine.medicineTime.hour}:${medicine.medicineTime.minute}"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
                 }),
               ),
             );

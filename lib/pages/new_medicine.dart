@@ -44,7 +44,7 @@ class _NewMedicineState extends State<NewMedicine> {
       return;
     }
     String dateString =
-        '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+        '  ${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
     String timeString =
         '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
     _initialDate.text = '$dateString $timeString';
@@ -106,6 +106,7 @@ class _NewMedicineState extends State<NewMedicine> {
                     }
                   },
                   decoration: const InputDecoration(
+                      counterText: "",
                       label: Text('Nome do Medicamento'),
                       border: OutlineInputBorder()),
                   controller: _medicineName,
@@ -171,9 +172,25 @@ class _NewMedicineState extends State<NewMedicine> {
                       });
                     },
                   )),
-              TextFormField(
-                onTap: _openInitialDatePicker,
-                controller: _initialDate,
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 8.0, right: 8, top: 3, bottom: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade500),
+                      borderRadius: BorderRadius.circular(4)),
+                  child: TextFormField(
+                    onTap: _openInitialDatePicker,
+                    enableSuggestions: true,
+                    cursorHeight: 34,
+                    decoration: const InputDecoration(
+                        label: Text(
+                      '  Dia e Hora Inicial',
+                      style: TextStyle(fontSize: 22),
+                    )),
+                    controller: _initialDate,
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(

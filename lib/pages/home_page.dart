@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          const Flexible(child: MounthCalendar()),
+          const MounthCalendar(),
           BlocBuilder(
             bloc: BlocProvider.of<SelectDayBloc>(context),
             builder: (context, state) {

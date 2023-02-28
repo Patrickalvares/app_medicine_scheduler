@@ -69,6 +69,7 @@ class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
             }
 
             return Expanded(
+              flex: 3,
               child: ListView.builder(
                 itemCount: schedules.length,
                 itemBuilder: ((context, index) {

@@ -50,62 +50,65 @@ class _MounthCalendarState extends State<MounthCalendar> {
       }
     } while (int.parse(plusOneDay(i)) > 1);
 
-    return Container(
-      padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
-      decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    targetMonthName,
-                    style: const TextStyle(fontSize: 25),
-                  ),
-                  Text(
-                    '${_targetDayTime.year}',
-                    style: const TextStyle(fontSize: 13),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        _targetDayTime = DateTime.utc(_targetDayTime.year,
-                            _targetDayTime.month - 1, _targetDayTime.day);
-                        setState(() {});
-                      },
-                      icon: const Icon(Icons.arrow_back_ios_new_sharp)),
-                  IconButton(
-                      onPressed: () {
-                        _targetDayTime = DateTime.utc(_targetDayTime.year,
-                            _targetDayTime.month + 1, _targetDayTime.day);
-                        setState(() {});
-                      },
-                      icon: const Icon(Icons.arrow_forward_ios_sharp)),
-                  IconButton(
-                      onPressed: () {
-                        _targetDayTime = DateTime.utc(DateTime.now().year,
-                            DateTime.now().month, _targetDayTime.day);
-                        setState(() {});
-                      },
-                      icon: const Icon(Icons.replay_outlined)),
-                ],
-              ),
-            ],
-          ),
-          Flexible(
-            child: GridView.count(
-              primary: false,
-              crossAxisCount: 7,
-              children: days,
+    return Flexible(
+      flex: (_targetDayTime.weekday == 6) ? 4 : 3,
+      child: Container(
+        padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+        decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      targetMonthName,
+                      style: const TextStyle(fontSize: 25),
+                    ),
+                    Text(
+                      '${_targetDayTime.year}',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          _targetDayTime = DateTime.utc(_targetDayTime.year,
+                              _targetDayTime.month - 1, _targetDayTime.day);
+                          setState(() {});
+                        },
+                        icon: const Icon(Icons.arrow_back_ios_new_sharp)),
+                    IconButton(
+                        onPressed: () {
+                          _targetDayTime = DateTime.utc(_targetDayTime.year,
+                              _targetDayTime.month + 1, _targetDayTime.day);
+                          setState(() {});
+                        },
+                        icon: const Icon(Icons.arrow_forward_ios_sharp)),
+                    IconButton(
+                        onPressed: () {
+                          _targetDayTime = DateTime.utc(DateTime.now().year,
+                              DateTime.now().month, _targetDayTime.day);
+                          setState(() {});
+                        },
+                        icon: const Icon(Icons.replay_outlined)),
+                  ],
+                ),
+              ],
             ),
-          ),
-        ],
+            Flexible(
+              child: GridView.count(
+                primary: false,
+                crossAxisCount: 7,
+                children: days,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,9 +1,6 @@
-import 'package:app_medicine_scheduler/bloc/medicine_bloc.dart';
-import 'package:app_medicine_scheduler/bloc/medicine_event.dart';
 import 'package:app_medicine_scheduler/bloc/select_day_state.dart';
 import 'package:app_medicine_scheduler/components/calendar.dart';
 import 'package:app_medicine_scheduler/components/selected_day_medicines.dart';
-import 'package:app_medicine_scheduler/models/medicine.dart';
 import 'package:app_medicine_scheduler/pages/new_medicine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,26 +20,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<MedicineBloc>(context).add(AddMedicineEvent(MonthlyMedicine(
-        'Viagra', DateTime.utc(2023, 03, 31, 22, 15),
-        observation: 'Azulzinho')));
-    BlocProvider.of<MedicineBloc>(context).add(AddMedicineEvent(DailyMedicine(
-        'Tilenol', DateTime.utc(2023, 02, 07, 21, 15),
-        observation: 'Dor de cabeça')));
-    BlocProvider.of<MedicineBloc>(context).add(AddMedicineEvent(WeeklyMedicine(
-        'Doril', DateTime.utc(2023, 02, 22, 22, 15),
-        observation: 'A dor sumio')));
-    BlocProvider.of<MedicineBloc>(context).add(AddMedicineEvent(
-        PeriodicMedicine('Cloroquina', DateTime.utc(2023, 02, 05, 22, 15),
-            const Duration(days: 5),
-            observation: 'Faz arminha com a Mão')));
-    BlocProvider.of<MedicineBloc>(context).add(
-      AddMedicineEvent(
-        PeriodicMedicine('Ritalina', DateTime.utc(2023, 02, 05, 22, 15),
-            const Duration(hours: 15),
-            observation: 'Pra doido'),
-      ),
-    );
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

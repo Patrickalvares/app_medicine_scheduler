@@ -40,37 +40,70 @@ class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
     }
   }
 
+  bool checkPeriodicPerDayInThisDay(PeriodicMedicine medicine) {
+    DateTime iter = medicine.initialDate;
+    do {
+      iter = iter.add(medicine.period);
+
+      if ((iter.day == widget.selectedDay.day) &&
+          (iter.month == widget.selectedDay.month) &&
+          (iter.year == widget.selectedDay.year)) {
+        return true;
+      }
+    } while (iter.isBefore(widget.selectedDay));
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-        bloc: BlocProvider.of<MedicineBloc>(context),
-        builder: (context, state) {
-          if (state is MedicineEmptyState) {
-            return const Text('Não há Remédios');
-          } else if (state is MedicineLoadedState) {
-            List<MedicineSchedule> schedules = [];
+    return Expanded(
+      flex: 3,
+      child: BlocBuilder(
+          bloc: BlocProvider.of<MedicineBloc>(context),
+          builder: (context, state) {
+            if (state is MedicineEmptyState) {
+              return const Center(child: Text('Não há Remédios'));
+            } else if (state is MedicineLoadedState) {
+              List<MedicineSchedule> schedules = [];
 
-            for (var medicine in state.medicines) {
-              if ((medicine is DailyMedicine) ||
-                  (medicine is WeeklyMedicine &&
-                      medicine.initialDate.weekday ==
-                          widget.selectedDay.weekday) ||
-                  (medicine is MonthlyMedicine &&
-                      (medicine.initialDate.day == widget.selectedDay.day ||
-                          checkLastMonthDayOverflow(medicine)))) {
-                DateTime day = DateTime.utc(
-                    widget.selectedDay.year,
-                    widget.selectedDay.month,
-                    widget.selectedDay.day,
-                    medicine.initialDate.hour,
-                    medicine.initialDate.minute);
-                schedules.add(MedicineSchedule(day, medicine));
+              for (var medicine in state.medicines) {
+                if ((medicine is DailyMedicine) ||
+                    (medicine is WeeklyMedicine &&
+                        medicine.initialDate.weekday ==
+                            widget.selectedDay.weekday) ||
+                    (medicine is MonthlyMedicine &&
+                        (medicine.initialDate.day == widget.selectedDay.day ||
+                            checkLastMonthDayOverflow(medicine)))) {
+                  DateTime day = DateTime.utc(
+                      widget.selectedDay.year,
+                      widget.selectedDay.month,
+                      widget.selectedDay.day,
+                      medicine.initialDate.hour,
+                      medicine.initialDate.minute);
+                  schedules.add(MedicineSchedule(day, medicine));
+                } else if (medicine is PeriodicMedicine) {
+                  DateTime iter = medicine.initialDate;
+                  do {
+                    if ((iter.day == widget.selectedDay.day) &&
+                        (iter.month == widget.selectedDay.month) &&
+                        (iter.year == widget.selectedDay.year)) {
+                      DateTime day = DateTime.utc(
+                          widget.selectedDay.year,
+                          widget.selectedDay.month,
+                          widget.selectedDay.day,
+                          iter.hour,
+                          iter.minute);
+                      schedules.add(MedicineSchedule(day, medicine));
+                    }
+                    iter = iter.add(medicine.period);
+                  } while (iter.isBefore(
+                      widget.selectedDay.add(const Duration(days: 1))));
+                }
               }
-            }
-
-            return Expanded(
-              flex: 3,
-              child: ListView.builder(
+              schedules
+                  .sort(((a, b) => a.medicineTime.compareTo(b.medicineTime)));
+              return ListView.builder(
                 itemCount: schedules.length,
                 itemBuilder: ((context, index) {
                   MedicineSchedule medicine = schedules[index];
@@ -100,11 +133,11 @@ class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
                     ),
                   );
                 }),
-              ),
-            );
-          } else {
-            return const Text("Erro doido");
-          }
-        });
+              );
+            } else {
+              return const Text("Erro doido");
+            }
+          }),
+    );
   }
 }

@@ -183,6 +183,7 @@ class _NewMedicineState extends State<NewMedicine> {
                     onTap: _openInitialDatePicker,
                     enableSuggestions: true,
                     cursorHeight: 34,
+                    readOnly: true,
                     decoration: const InputDecoration(
                         label: Text(
                       '  Dia e Hora Inicial',
@@ -241,7 +242,8 @@ class _NewMedicineState extends State<NewMedicine> {
                           {
                             medicine = PeriodicMedicine(
                                 _medicineName.text,
-                                DateTime.now(),
+                                DateFormat('dd/MM/y H:m')
+                                    .parse(_initialDate.text),
                                 Duration(
                                   days: int.parse(_periodicMedicineDays.text),
                                 ),
@@ -252,7 +254,8 @@ class _NewMedicineState extends State<NewMedicine> {
                           {
                             medicine = PeriodicMedicine(
                                 _medicineName.text,
-                                DateTime.now(),
+                                DateFormat('dd/MM/y H:m')
+                                    .parse(_initialDate.text),
                                 Duration(
                                     hours: _timeInHours.hour,
                                     minutes: _timeInHours.minute),

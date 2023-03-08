@@ -1,4 +1,5 @@
 import 'package:app_medicine_scheduler/bloc/medicine_bloc.dart';
+import 'package:app_medicine_scheduler/bloc/medicine_event.dart';
 import 'package:app_medicine_scheduler/bloc/medicine_state.dart';
 import 'package:app_medicine_scheduler/components/selected_day_medicines.dart';
 import 'package:app_medicine_scheduler/models/medicine.dart';
@@ -93,16 +94,17 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
                                         ),
                                         TextButton(
                                           onPressed: () =>
-                                              Navigator.pop(context, 'Deletar'),
+                                              BlocProvider.of<MedicineBloc>(
+                                                      context)
+                                                  .add(RemoveMedicineEvent(
+                                                      medicine.medicine)),
                                           child: const Text('Deletar'),
                                         ),
                                       ],
                                     );
                                   },
                                 ).then((value) {
-                                  if (value == 'Deletar') {
-                                    // Coloque o código para deletar aqui
-                                  }
+                                  if (value == 'Deletar') {}
                                 });
                               },
                             ),

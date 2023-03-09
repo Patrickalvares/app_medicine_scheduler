@@ -7,8 +7,8 @@ import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:intl/intl.dart';
 
 class EditMedicine extends StatefulWidget {
-  Medicine medicine;
-  EditMedicine(this.medicine, {super.key});
+  final Medicine medicine;
+  const EditMedicine(this.medicine, {super.key});
 
   @override
   State<EditMedicine> createState() => _NewMedicineState();
@@ -83,7 +83,7 @@ class _NewMedicineState extends State<EditMedicine> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
             Text(
-              'Editar Medicamento',
+              '   Editar Medicamento',
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

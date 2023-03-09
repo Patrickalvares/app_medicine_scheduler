@@ -6,6 +6,7 @@ import 'package:app_medicine_scheduler/models/medicine.dart';
 import 'package:app_medicine_scheduler/pages/edit_medicine_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class MedicinesManagerPage extends StatefulWidget {
   const MedicinesManagerPage({
@@ -28,7 +29,7 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
             Text(
-              'Gerenciar Medicamento',
+              'Gerenciar Medicamentos',
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -56,6 +57,7 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
               }
 
               return ListView.builder(
+                physics: const BouncingScrollPhysics(),
                 itemCount: schedules.length,
                 itemBuilder: ((context, index) {
                   MedicineSchedule medicine = schedules[index];
@@ -80,14 +82,12 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
                                       Text(medicine.medicine.name),
                                     ]),
                               ),
-                              Flexible(
-                                child: Text(
-                                    "${medicine.medicineTime.hour}:${medicine.medicineTime.minute}"),
-                              ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
+                                  Text(DateFormat('HH:mm')
+                                      .format(medicine.medicine.initialDate)),
                                   IconButton(
                                     icon: const Icon(Icons.delete),
                                     onPressed: () {
@@ -106,7 +106,6 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
                                               ),
                                               TextButton(
                                                 onPressed: () {
-                                                  // Passa a instância atual do MedicineBloc como segundo argumento
                                                   BlocProvider.of<MedicineBloc>(
                                                           context)
                                                       .add(
@@ -126,7 +125,7 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
                                     },
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.edit_note_rounded),
+                                    icon: const Icon(Icons.edit_note_rounded),
                                     onPressed: () {
                                       Navigator.push(
                                         context,
@@ -143,8 +142,54 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
                           ),
                         ),
                         children: [
-                          Text(medicine.medicine.periodicKind.toString()),
-                          Text(medicine.medicine.observation.toString())
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 8.0, right: 8, left: 8),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      children: <TextSpan>[
+                                        const TextSpan(
+                                          text: 'Tipo Periódico:',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              ' ${medicine.medicine.periodicKind}',
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                              Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      children: <TextSpan>[
+                                        const TextSpan(
+                                          text: 'Observação:',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              ' ${medicine.medicine.observation}',
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                            ],
+                          )
                         ],
                       ),
                     ),

@@ -62,7 +62,10 @@ class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
       flex: 3,
       child: Column(
         children: [
-          Text(DateFormat('dd/MM/yyyy').format(widget.selectedDay)),
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(DateFormat('dd/MM/yyyy').format(widget.selectedDay)),
+          ),
           BlocBuilder(
               bloc: BlocProvider.of<MedicineBloc>(context),
               builder: (context, state) {
@@ -110,6 +113,7 @@ class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
                       ((a, b) => a.medicineTime.compareTo(b.medicineTime)));
                   return Flexible(
                     child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
                       itemCount: schedules.length,
                       itemBuilder: ((context, index) {
                         MedicineSchedule medicine = schedules[index];

@@ -44,7 +44,7 @@ class _NewMedicineState extends State<NewMedicine> {
       return;
     }
     String dateString =
-        '  ${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+        '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
     String timeString =
         '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
     _initialDate.text = '$dateString $timeString';
@@ -69,21 +69,14 @@ class _NewMedicineState extends State<NewMedicine> {
         backgroundColor: Colors.transparent,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
+          children: const [
+            Text(
               'Adicionar Medicamento',
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 23),
             ),
-            IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.manage_accounts_rounded,
-                  color: Colors.black,
-                  size: 35,
-                ))
           ],
         ),
       ),
@@ -175,22 +168,18 @@ class _NewMedicineState extends State<NewMedicine> {
               Padding(
                 padding: const EdgeInsets.only(
                     left: 8.0, right: 8, top: 3, bottom: 20),
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade500),
-                      borderRadius: BorderRadius.circular(4)),
-                  child: TextFormField(
-                    onTap: _openInitialDatePicker,
-                    enableSuggestions: true,
-                    cursorHeight: 34,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                        label: Text(
-                      '  Dia e Hora Inicial',
-                      style: TextStyle(fontSize: 22),
-                    )),
-                    controller: _initialDate,
-                  ),
+                child: TextFormField(
+                  onTap: _openInitialDatePicker,
+                  enableSuggestions: true,
+                  cursorHeight: 34,
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      label: Text(
+                        'Dia e Hora Inicial',
+                        style: TextStyle(fontSize: 22),
+                      ),
+                      border: OutlineInputBorder()),
+                  controller: _initialDate,
                 ),
               ),
               Padding(
@@ -215,7 +204,7 @@ class _NewMedicineState extends State<NewMedicine> {
                           {
                             medicine = DailyMedicine(
                                 _medicineName.text,
-                                DateFormat('dd/MM/y H:m')
+                                DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
                                 observation: _medicineObservation.text);
                             break;
@@ -224,7 +213,7 @@ class _NewMedicineState extends State<NewMedicine> {
                           {
                             medicine = WeeklyMedicine(
                                 _medicineName.text,
-                                DateFormat('dd/MM/y H:m')
+                                DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
                                 observation: _medicineObservation.text);
                             break;
@@ -233,7 +222,7 @@ class _NewMedicineState extends State<NewMedicine> {
                           {
                             medicine = MonthlyMedicine(
                                 _medicineName.text,
-                                DateFormat('dd/MM/y H:m')
+                                DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
                                 observation: _medicineObservation.text);
                             break;
@@ -242,7 +231,7 @@ class _NewMedicineState extends State<NewMedicine> {
                           {
                             medicine = PeriodicMedicine(
                                 _medicineName.text,
-                                DateFormat('dd/MM/y H:m')
+                                DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
                                 Duration(
                                   days: int.parse(_periodicMedicineDays.text),
@@ -254,7 +243,7 @@ class _NewMedicineState extends State<NewMedicine> {
                           {
                             medicine = PeriodicMedicine(
                                 _medicineName.text,
-                                DateFormat('dd/MM/y H:m')
+                                DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
                                 Duration(
                                     hours: _timeInHours.hour,

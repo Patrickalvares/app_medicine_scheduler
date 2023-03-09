@@ -15,15 +15,24 @@ class MedicineBloc extends Bloc<MedicineEvent, MedicineState> {
         const Duration(days: 5),
         observation: 'Faz arminha com a Mão'),
     PeriodicMedicine('Ritalina', DateTime.utc(2023, 02, 27, 23, 00),
-        const Duration(hours: 3, minutes: 0),
+        const Duration(hours: 15, minutes: 0),
         observation: 'Pra doido')
   ];
 
   List<Medicine> medicines = initialMedicines;
   MedicineBloc() : super(MedicineLoadedState(initialMedicines)) {
-    on<AddMedicineEvent>((event, emit) {
-      medicines.add(event.medicine);
-      emit(MedicineLoadedState(medicines));
-    });
+    on<AddMedicineEvent>(handleAddMedicineEvent);
+    on<RemoveMedicineEvent>(handleRemoveMedicineEvent);
+  }
+  void handleAddMedicineEvent(
+      AddMedicineEvent event, Emitter<MedicineState> emit) {
+    medicines.add(event.medicine);
+    emit(MedicineLoadedState(medicines));
+  }
+
+  void handleRemoveMedicineEvent(
+      RemoveMedicineEvent event, Emitter<MedicineState> emit) {
+    medicines.remove(event.medicine);
+    emit(MedicineLoadedState(medicines));
   }
 }

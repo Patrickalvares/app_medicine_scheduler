@@ -33,7 +33,11 @@ class _MounthCalendarState extends State<MounthCalendar> {
         (_targetDayTime.weekday == 7) ? 0 : (_targetDayTime.weekday);
     days.addAll(buildEmptyDates(daysToSkip));
     int i = 0;
+    bool has31Days = false;
     do {
+      if (plusOneDay(i) == '31') {
+        has31Days = true;
+      }
       if (plusOneDay(i) == selectDay.day.toString() &&
           _targetDayTime.month == selectDay.month &&
           _targetDayTime.year == selectDay.year) {
@@ -51,7 +55,10 @@ class _MounthCalendarState extends State<MounthCalendar> {
     } while (int.parse(plusOneDay(i)) > 1);
 
     return Flexible(
-      flex: (_targetDayTime.weekday == 6) ? 4 : 3,
+      flex: (_targetDayTime.weekday == 6 ||
+              (has31Days && _targetDayTime.weekday == 5))
+          ? 4
+          : 3,
       child: Container(
         padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
         decoration: BoxDecoration(border: Border.all(color: Colors.black)),

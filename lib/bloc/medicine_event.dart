@@ -8,6 +8,7 @@ class AddMedicineEvent extends MedicineEvent {
 }
 
 class RemoveMedicineEvent extends MedicineEvent {
-  Medicine medicine;
+  final Medicine medicine;
+
   RemoveMedicineEvent(this.medicine);
 }

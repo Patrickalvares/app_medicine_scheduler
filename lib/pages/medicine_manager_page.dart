@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MedicinesManagerPage extends StatefulWidget {
-  const MedicinesManagerPage({super.key});
+  const MedicinesManagerPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<MedicinesManagerPage> createState() => _MedicinesManagerPageState();
@@ -93,19 +95,23 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
                                           child: const Text('Cancelar'),
                                         ),
                                         TextButton(
-                                          onPressed: () =>
-                                              BlocProvider.of<MedicineBloc>(
-                                                      context)
-                                                  .add(RemoveMedicineEvent(
-                                                      medicine.medicine)),
+                                          onPressed: () {
+                                            // Passa a instância atual do MedicineBloc como segundo argumento
+                                            BlocProvider.of<MedicineBloc>(
+                                                    context)
+                                                .add(
+                                              RemoveMedicineEvent(
+                                                medicine.medicine,
+                                              ),
+                                            );
+                                            Navigator.pop(context, 'Deletar');
+                                          },
                                           child: const Text('Deletar'),
                                         ),
                                       ],
                                     );
                                   },
-                                ).then((value) {
-                                  if (value == 'Deletar') {}
-                                });
+                                );
                               },
                             ),
                           ],

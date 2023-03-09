@@ -35,4 +35,7 @@ class MedicineBloc extends Bloc<MedicineEvent, MedicineState> {
     medicines.remove(event.medicine);
     emit(MedicineLoadedState(medicines));
   }
+
+  void handleUpdateMedicineEvent(
+      UpdateMedicineEvent event, Emitter<MedicineState> emit) {}
 }

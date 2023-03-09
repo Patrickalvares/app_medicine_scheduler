@@ -3,6 +3,7 @@ import 'package:app_medicine_scheduler/bloc/medicine_event.dart';
 import 'package:app_medicine_scheduler/bloc/medicine_state.dart';
 import 'package:app_medicine_scheduler/components/selected_day_medicines.dart';
 import 'package:app_medicine_scheduler/models/medicine.dart';
+import 'package:app_medicine_scheduler/pages/edit_medicine_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -65,57 +66,86 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
                       decoration: BoxDecoration(
                           border: Border.all(),
                           borderRadius: BorderRadius.circular(8)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                      child: ExpansionTile(
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: Flexible(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(medicine.medicine.name),
+                                    ]),
+                              ),
+                              Flexible(
+                                child: Text(
+                                    "${medicine.medicineTime.hour}:${medicine.medicineTime.minute}"),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text(medicine.medicine.name),
-                                  Text(medicine.medicine.observation.toString())
-                                ]),
-                            Text(
-                                "${medicine.medicine.periodicKind} ${medicine.medicineTime.hour}:${medicine.medicineTime.minute}"),
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text('Confirmação'),
-                                      content: const Text(
-                                          'Tem certeza que deseja deletar?'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () => Navigator.pop(
-                                              context, 'Cancelar'),
-                                          child: const Text('Cancelar'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            // Passa a instância atual do MedicineBloc como segundo argumento
-                                            BlocProvider.of<MedicineBloc>(
-                                                    context)
-                                                .add(
-                                              RemoveMedicineEvent(
-                                                medicine.medicine,
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Confirmação'),
+                                            content: const Text(
+                                                'Tem certeza que deseja deletar?'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    context, 'Cancelar'),
+                                                child: const Text('Cancelar'),
                                               ),
-                                            );
-                                            Navigator.pop(context, 'Deletar');
-                                          },
-                                          child: const Text('Deletar'),
+                                              TextButton(
+                                                onPressed: () {
+                                                  // Passa a instância atual do MedicineBloc como segundo argumento
+                                                  BlocProvider.of<MedicineBloc>(
+                                                          context)
+                                                      .add(
+                                                    RemoveMedicineEvent(
+                                                      medicine.medicine,
+                                                    ),
+                                                  );
+                                                  Navigator.pop(
+                                                      context, 'Deletar');
+                                                },
+                                                child: const Text('Deletar'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.edit_note_rounded),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (contextNew) =>
+                                              EditMedicine(medicine.medicine),
                                         ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          ],
+                                      );
+                                    },
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
+                        children: [
+                          Text(medicine.medicine.periodicKind.toString()),
+                          Text(medicine.medicine.observation.toString())
+                        ],
                       ),
                     ),
                   );

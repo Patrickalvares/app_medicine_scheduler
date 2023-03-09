@@ -2,6 +2,7 @@ import 'package:app_medicine_scheduler/bloc/select_day_bloc.dart';
 import 'package:app_medicine_scheduler/bloc/select_day_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class MounthCalendar extends StatefulWidget {
   const MounthCalendar({super.key});
@@ -60,7 +61,11 @@ class _MounthCalendarState extends State<MounthCalendar> {
           ? 4
           : 3,
       child: Container(
-        padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+        padding: const EdgeInsets.only(
+          left: 25,
+          right: 25,
+          top: 5,
+        ),
         decoration: BoxDecoration(border: Border.all(color: Colors.black)),
         child: Column(
           children: [
@@ -114,6 +119,8 @@ class _MounthCalendarState extends State<MounthCalendar> {
                 children: days,
               ),
             ),
+            const SizedBox(height: 7),
+            Text(DateFormat('dd/MM/yyyy').format(selectDay)),
           ],
         ),
       ),

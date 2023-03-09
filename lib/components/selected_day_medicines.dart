@@ -62,10 +62,6 @@ class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
       flex: 3,
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(DateFormat('dd/MM/yyyy').format(widget.selectedDay)),
-          ),
           BlocBuilder(
               bloc: BlocProvider.of<MedicineBloc>(context),
               builder: (context, state) {

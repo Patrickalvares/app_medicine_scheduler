@@ -69,7 +69,6 @@ class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
                   return const Center(child: Text('Não há Remédios'));
                 } else if (state is MedicineLoadedState) {
                   List<MedicineSchedule> schedules = [];
-
                   for (var medicine in state.medicines) {
                     if ((medicine is DailyMedicine) ||
                         (medicine is WeeklyMedicine &&

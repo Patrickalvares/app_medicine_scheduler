@@ -215,6 +215,9 @@ class _NewMedicineState extends State<EditMedicine> {
                         case ' Diariamente':
                           {
                             medicine = DailyMedicine(
+                                DateTime.now()
+                                    .microsecondsSinceEpoch
+                                    .toString(),
                                 _medicineName.text,
                                 DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
@@ -224,6 +227,9 @@ class _NewMedicineState extends State<EditMedicine> {
                         case ' Semanalmente':
                           {
                             medicine = WeeklyMedicine(
+                                DateTime.now()
+                                    .microsecondsSinceEpoch
+                                    .toString(),
                                 _medicineName.text,
                                 DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
@@ -233,6 +239,9 @@ class _NewMedicineState extends State<EditMedicine> {
                         case ' Mensalmente':
                           {
                             medicine = MonthlyMedicine(
+                                DateTime.now()
+                                    .microsecondsSinceEpoch
+                                    .toString(),
                                 _medicineName.text,
                                 DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
@@ -243,6 +252,9 @@ class _NewMedicineState extends State<EditMedicine> {
                           {
                             medicine = PeriodicMedicine(
                                 _medicineName.text,
+                                DateTime.now()
+                                    .microsecondsSinceEpoch
+                                    .toString(),
                                 DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
                                 Duration(
@@ -254,6 +266,9 @@ class _NewMedicineState extends State<EditMedicine> {
                         case ' A cada __ horas':
                           {
                             medicine = PeriodicMedicine(
+                                DateTime.now()
+                                    .microsecondsSinceEpoch
+                                    .toString(),
                                 _medicineName.text,
                                 DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),

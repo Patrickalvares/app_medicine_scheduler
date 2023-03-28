@@ -10,14 +10,16 @@ class DatabaseHelper {
     initialDate TEXT,
     active INTEGER,
     observation TEXT,
-    periodicKind TEXT
+    periodicKind TEXT,
+    period INTEGER,
+    offset TEXT
   )
 ''');
   }
 
   static Future<Database> getDb() async {
     return openDatabase(
-      'medicines.db',
+      'medicines',
       version: 1,
       onCreate: (Database database, int version) async {
         await createTables(database);
@@ -28,9 +30,35 @@ class DatabaseHelper {
   Future<void> insertMedicine(Medicine medicine) async {
     final db = await getDb();
     await db.insert(
-      'medicines.db',
+      'medicines',
       medicine.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<List<Medicine>> getMedicinesFromTable() async {
+    var table = await queryAllRows();
+    List<Medicine> ret = [];
+    table.forEach((element) {
+      if (element['periodicKind'] == 'Diariamente') {
+        ret.add(DailyMedicine.fromMap(element));
+      } else if (element['periodicKind'] == 'Semanalmente') {
+        ret.add(WeeklyMedicine.fromMap(element));
+      } else if (element['periodicKind'] == 'Mensalmente') {
+        ret.add(MonthlyMedicine.fromMap(element));
+      } else if (element['periodicKind'] == 'Personalizado') {
+        ret.add(PeriodicMedicine.fromMap(element));
+      } else if (element['periodicKind'] == 'Especifico') {
+        ret.add(SpecificHoursMedicine.fromMap(element));
+      }
+    });
+    return ret;
+  }
+
+  Future<List<Map<String, dynamic>>> queryAllRows() async {
+    final db = await getDb();
+    var a = await db.query('medicines');
+    print(a);
+    return a;
   }
 }

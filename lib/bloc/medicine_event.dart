@@ -17,3 +17,5 @@ class UpdateMedicineEvent extends MedicineEvent {
   final Medicine medicine;
   UpdateMedicineEvent(this.medicine);
 }
+
+class FetchMedicineEvent extends MedicineEvent {}

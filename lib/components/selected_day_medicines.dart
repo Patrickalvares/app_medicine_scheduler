@@ -1,4 +1,5 @@
 import 'package:app_medicine_scheduler/bloc/medicine_bloc.dart';
+import 'package:app_medicine_scheduler/bloc/medicine_event.dart';
 import 'package:app_medicine_scheduler/bloc/medicine_state.dart';
 import 'package:app_medicine_scheduler/models/medicine.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<MedicineBloc>(context).add(FetchMedicineEvent());
   }
 
   bool checkLastMonthDayOverflow(Medicine medicine) {

@@ -15,27 +15,49 @@ class EditMedicine extends StatefulWidget {
 }
 
 class _NewMedicineState extends State<EditMedicine> {
+  String? _recurrenceTypevalue;
   final _formkey = GlobalKey<FormState>();
   final TextEditingController _medicineName = TextEditingController();
   final TextEditingController _medicineObservation = TextEditingController();
   final TextEditingController _periodicMedicineDays = TextEditingController();
   final TextEditingController _initialDate = TextEditingController();
+  late DateTime _timeInHours;
   static const List<String> dropDownItems = [
-    ' Diariamente',
-    ' Semanalmente',
-    ' Mensalmente',
-    ' A cada __ dias',
-    ' A cada __ horas',
+    'Diariamente',
+    'Semanalmente',
+    'Mensalmente',
+    'A cada __ dias',
+    'A cada __ horas',
   ];
 
   @override
   void initState() {
+    _timeInHours = DateTime(0, 0, 0, 12, 0);
     _medicineName.text = widget.medicine.name;
     _medicineObservation.text = widget.medicine.observation ?? "";
     _periodicMedicineDays.text = (widget.medicine is PeriodicMedicine)
         ? (widget.medicine as PeriodicMedicine).period.toString()
         : "";
-    _initialDate.text = widget.medicine.initialDate.toString();
+    _recurrenceTypevalue = widget.medicine.periodicKind;
+
+    if (widget.medicine is PeriodicMedicine) {
+      if ((widget.medicine as PeriodicMedicine).period.inHours >= 24) {
+        _recurrenceTypevalue = 'A cada __ dias';
+        _periodicMedicineDays.text =
+            (widget.medicine as PeriodicMedicine).period.inDays.toString();
+      } else {
+        _recurrenceTypevalue = 'A cada __ horas';
+        _timeInHours = DateTime(
+            0,
+            0,
+            0,
+            (widget.medicine as PeriodicMedicine).period.inHours,
+            (widget.medicine as PeriodicMedicine).period.inMinutes);
+      }
+    }
+    _initialDate.text =
+        DateFormat('dd/MM/yyyy HH:mm').format(widget.medicine.initialDate);
+
     super.initState();
   }
 
@@ -61,9 +83,6 @@ class _NewMedicineState extends State<EditMedicine> {
         '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
     _initialDate.text = '$dateString $timeString';
   }
-
-  String? _recurrenceTypevalue;
-  late DateTime _timeInHours;
 
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
         value: item,
@@ -144,7 +163,7 @@ class _NewMedicineState extends State<EditMedicine> {
                 ),
               ),
               Visibility(
-                visible: (_recurrenceTypevalue == ' A cada __ dias'),
+                visible: (_recurrenceTypevalue == 'A cada __ dias'),
                 child: Padding(
                   padding: const EdgeInsets.only(
                       left: 8.0, right: 8, top: 3, bottom: 20),
@@ -166,10 +185,10 @@ class _NewMedicineState extends State<EditMedicine> {
                 ),
               ),
               Visibility(
-                  visible: (_recurrenceTypevalue == ' A cada __ horas'),
+                  visible: (_recurrenceTypevalue == 'A cada __ horas'),
                   child: TimePickerSpinner(
                     isForce2Digits: true,
-                    time: DateTime(0, 0, 0, 12, 0),
+                    time: _timeInHours,
                     minutesInterval: 5,
                     onTimeChange: (time) {
                       setState(() {
@@ -212,49 +231,41 @@ class _NewMedicineState extends State<EditMedicine> {
                     if (_formkey.currentState!.validate()) {
                       late Medicine medicine;
                       switch (_recurrenceTypevalue) {
-                        case ' Diariamente':
+                        case 'Diariamente':
                           {
                             medicine = DailyMedicine(
-                                DateTime.now()
-                                    .microsecondsSinceEpoch
-                                    .toString(),
+                                widget.medicine.id,
                                 _medicineName.text,
                                 DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
                                 observation: _medicineObservation.text);
                             break;
                           }
-                        case ' Semanalmente':
+                        case 'Semanalmente':
                           {
                             medicine = WeeklyMedicine(
-                                DateTime.now()
-                                    .microsecondsSinceEpoch
-                                    .toString(),
+                                widget.medicine.id,
                                 _medicineName.text,
                                 DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
                                 observation: _medicineObservation.text);
                             break;
                           }
-                        case ' Mensalmente':
+                        case 'Mensalmente':
                           {
                             medicine = MonthlyMedicine(
-                                DateTime.now()
-                                    .microsecondsSinceEpoch
-                                    .toString(),
+                                widget.medicine.id,
                                 _medicineName.text,
                                 DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
                                 observation: _medicineObservation.text);
                             break;
                           }
-                        case ' A cada __ dias':
+                        case 'A cada __ dias':
                           {
                             medicine = PeriodicMedicine(
+                                widget.medicine.id,
                                 _medicineName.text,
-                                DateTime.now()
-                                    .microsecondsSinceEpoch
-                                    .toString(),
                                 DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
                                 Duration(
@@ -263,12 +274,10 @@ class _NewMedicineState extends State<EditMedicine> {
                                 observation: _medicineObservation.text);
                             break;
                           }
-                        case ' A cada __ horas':
+                        case 'A cada __ horas':
                           {
                             medicine = PeriodicMedicine(
-                                DateTime.now()
-                                    .microsecondsSinceEpoch
-                                    .toString(),
+                                widget.medicine.id,
                                 _medicineName.text,
                                 DateFormat('dd/MM/yyyy HH:mm')
                                     .parse(_initialDate.text),
@@ -283,7 +292,7 @@ class _NewMedicineState extends State<EditMedicine> {
                               "Erro na seleção do tipo de Frequência");
                       }
                       BlocProvider.of<MedicineBloc>(context)
-                          .add(AddMedicineEvent(medicine));
+                          .add(UpdateMedicineEvent(medicine));
                       Navigator.pop(context);
                     }
                   },

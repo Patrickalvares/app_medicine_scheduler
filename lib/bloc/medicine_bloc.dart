@@ -25,6 +25,7 @@ class MedicineBloc extends Bloc<MedicineEvent, MedicineState> {
     on<AddMedicineEvent>(handleAddMedicineEvent);
     on<RemoveMedicineEvent>(handleRemoveMedicineEvent);
     on<FetchMedicineEvent>(handleFetchMedicineEvent);
+    on<UpdateMedicineEvent>(handleUpdateMedicineEvent);
   }
   void handleAddMedicineEvent(
       AddMedicineEvent event, Emitter<MedicineState> emit) {
@@ -38,12 +39,27 @@ class MedicineBloc extends Bloc<MedicineEvent, MedicineState> {
 
   void handleRemoveMedicineEvent(
       RemoveMedicineEvent event, Emitter<MedicineState> emit) {
+    DatabaseHelper()
+        .removeMedicine(event.medicine)
+        .then((value) => DatabaseHelper().queryAllRows());
+
     medicines.remove(event.medicine);
     emit(MedicineLoadedState(medicines));
   }
 
   void handleUpdateMedicineEvent(
-      UpdateMedicineEvent event, Emitter<MedicineState> emit) {}
+      UpdateMedicineEvent event, Emitter<MedicineState> emit) async {
+    await DatabaseHelper().updateMedicine(event.medicine);
+
+    int index =
+        medicines.indexWhere((medicine) => medicine.id == event.medicine.id);
+
+    if (index != -1) {
+      medicines[index] = event.medicine;
+    }
+
+    emit(MedicineLoadedState(medicines));
+  }
 
   Future handleFetchMedicineEvent(
       FetchMedicineEvent event, Emitter<MedicineState> emit) async {

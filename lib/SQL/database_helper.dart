@@ -27,11 +27,27 @@ class DatabaseHelper {
     );
   }
 
+  Future<void> removeMedicine(Medicine medicine) async {
+    final db = await getDb();
+    await db.delete('medicines', where: 'id = ?', whereArgs: [medicine.id]);
+  }
+
   Future<void> insertMedicine(Medicine medicine) async {
     final db = await getDb();
     await db.insert(
       'medicines',
       medicine.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> updateMedicine(Medicine medicine) async {
+    final db = await getDb();
+    await db.update(
+      'medicines',
+      medicine.toMap(),
+      where: 'id = ?',
+      whereArgs: [medicine.id],
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }

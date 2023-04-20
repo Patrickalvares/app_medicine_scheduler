@@ -167,7 +167,7 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
                                       ],
                                     ),
                                   )),
-                              Padding(
+                              medicine.medicine.observation != '' ?Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: RichText(
                                     text: TextSpan(
@@ -187,7 +187,10 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
                                         ),
                                       ],
                                     ),
-                                  )),
+                                  )): const Padding(
+                                    padding: EdgeInsets.all(4.0),
+                                    child: SizedBox(),
+                                  ),
                             ],
                           )
                         ],

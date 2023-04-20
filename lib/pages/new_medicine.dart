@@ -169,6 +169,12 @@ class _NewMedicineState extends State<NewMedicine> {
                 padding: const EdgeInsets.only(
                     left: 8.0, right: 8, top: 3, bottom: 20),
                 child: TextFormField(
+                   validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Selecione Data e Hora';
+                    }
+                    return null;
+                  },
                   onTap: _openInitialDatePicker,
                   enableSuggestions: true,
                   cursorHeight: 34,
@@ -197,6 +203,8 @@ class _NewMedicineState extends State<NewMedicine> {
                 child: FloatingActionButton.extended(
                   backgroundColor: Colors.black,
                   onPressed: () {
+
+                    
                     if (_formkey.currentState!.validate()) {
                       late Medicine medicine;
                       switch (_recurrenceTypevalue) {

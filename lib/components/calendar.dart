@@ -11,10 +11,30 @@ class MounthCalendar extends StatefulWidget {
   State<MounthCalendar> createState() => _MounthCalendarState();
 }
 
-class _MounthCalendarState extends State<MounthCalendar> {
+class _MounthCalendarState extends State<MounthCalendar>
+    with SingleTickerProviderStateMixin {
   DateTime _targetDayTime =
       DateTime.utc(DateTime.now().year, DateTime.now().month, 01);
   late DateTime selectDay = DateTime.now();
+  late AnimationController _animationController;
+
+  int previousMonth = DateTime.now().month;
+  int _currentTransitionDirection = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,32 +54,25 @@ class _MounthCalendarState extends State<MounthCalendar> {
         (_targetDayTime.weekday == 7) ? 0 : (_targetDayTime.weekday);
     days.addAll(buildEmptyDates(daysToSkip));
     int i = 0;
-    bool has31Days = false;
+
     do {
-      if (plusOneDay(i) == '31') {
-        has31Days = true;
+      Color? backgroundColor;
+      Color textColor = Colors.black;
+
+      if (isSelectDay(i)) {
+        backgroundColor = Colors.black;
+        textColor = Colors.white;
+      } else if (isToday(i)) {
+        backgroundColor = Colors.grey[600];
+        textColor = Colors.white;
       }
-      if (plusOneDay(i) == selectDay.day.toString() &&
-          _targetDayTime.month == selectDay.month &&
-          _targetDayTime.year == selectDay.year) {
-        days.add(buildSelectDayBlock(i));
-        i++;
-      } else if (plusOneDay(i) == DateTime.now().day.toString() &&
-          _targetDayTime.month == DateTime.now().month &&
-          _targetDayTime.year == DateTime.now().year) {
-        days.add(buildCurrentDayBlock(i));
-        i++;
-      } else {
-        days.add(buildNotCurrentDayBlock(i));
-        i++;
-      }
+
+      days.add(buildDayContainer(i, backgroundColor, textColor));
+      i++;
     } while (int.parse(plusOneDay(i)) > 1);
 
     return Flexible(
-      flex: (_targetDayTime.weekday == 6 ||
-              (has31Days && _targetDayTime.weekday == 5))
-          ? 4
-          : 3,
+      flex: (_targetDayTime.weekday == 6 || has31Days()) ? 4 : 3,
       child: Container(
         padding: const EdgeInsets.only(
           left: 25,
@@ -89,16 +102,12 @@ class _MounthCalendarState extends State<MounthCalendar> {
                   children: [
                     IconButton(
                         onPressed: () {
-                          _targetDayTime = DateTime.utc(_targetDayTime.year,
-                              _targetDayTime.month - 1, _targetDayTime.day);
-                          setState(() {});
+                          updateTargetDayTime(1);
                         },
                         icon: const Icon(Icons.arrow_back_ios_new_sharp)),
                     IconButton(
                         onPressed: () {
-                          _targetDayTime = DateTime.utc(_targetDayTime.year,
-                              _targetDayTime.month + 1, _targetDayTime.day);
-                          setState(() {});
+                          updateTargetDayTime(-1);
                         },
                         icon: const Icon(Icons.arrow_forward_ios_sharp)),
                     IconButton(
@@ -113,10 +122,24 @@ class _MounthCalendarState extends State<MounthCalendar> {
               ],
             ),
             Flexible(
-              child: GridView.count(
-                primary: false,
-                crossAxisCount: 7,
-                children: days,
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 800),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  Offset beginOffset =
+                      getTransitionBeginOffset(_currentTransitionDirection);
+                  return SlideTransition(
+                    child: child,
+                    position:
+                        Tween<Offset>(begin: beginOffset, end: Offset(0.0, 0.0))
+                            .animate(animation),
+                  );
+                },
+                child: GridView.count(
+                  key: ValueKey<int>(_targetDayTime.month),
+                  primary: false,
+                  crossAxisCount: 7,
+                  children: days,
+                ),
               ),
             ),
             const SizedBox(height: 7),
@@ -125,6 +148,34 @@ class _MounthCalendarState extends State<MounthCalendar> {
         ),
       ),
     );
+  }
+
+  Offset getTransitionBeginOffset(int direction) {
+    if (direction == -1) {
+      if (previousMonth > _targetDayTime.month) {
+        return const Offset(2.5, 0.0);
+      } else {
+        return const Offset(2.5, 0.0);
+      }
+    } else {
+      if (previousMonth < _targetDayTime.month) {
+        return const Offset(-2.5, 0.0);
+      } else {
+        return const Offset(-2.5, 0.0);
+      }
+    }
+  }
+
+  void updateTargetDayTime(int direction) {
+    previousMonth = _targetDayTime.month;
+    _targetDayTime = DateTime.utc(_targetDayTime.year,
+        _targetDayTime.month + direction, _targetDayTime.day);
+    _currentTransitionDirection = direction;
+    setState(() {});
+  }
+
+  int getTransitionDirection(int direction) {
+    return direction == 1 ? -1 : 1;
   }
 
   Widget buildWeekDaysNameHeader(String weekDayName) {
@@ -152,114 +203,96 @@ class _MounthCalendarState extends State<MounthCalendar> {
     return newDay;
   }
 
-  Widget buildCurrentDayBlock(int day) {
+  bool isSelectDay(int day) {
+    return plusOneDay(day) == selectDay.day.toString() &&
+        _targetDayTime.month == selectDay.month &&
+        _targetDayTime.year == selectDay.year;
+  }
+
+  bool isToday(int day) {
+    return plusOneDay(day) == DateTime.now().day.toString() &&
+        _targetDayTime.month == DateTime.now().month &&
+        _targetDayTime.year == DateTime.now().year;
+  }
+
+  Widget buildDayContainer(int day, Color? backgroundColor, Color textColor) {
     return Padding(
       padding: const EdgeInsets.all(0.5),
       child: InkWell(
         onTap: () {
-          BlocProvider.of<SelectDayBloc>(context).add(UpdateSelectDay(
-              DateTime.utc(
-                  _targetDayTime.year, _targetDayTime.month, day + 1)));
-          setState(() {
-            selectDay = DateTime.utc(
-                _targetDayTime.year, _targetDayTime.month, day + 1);
-          });
+          updateSelectedDay(day);
         },
-        child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[600],
-              border: Border.all(color: Colors.grey),
-            ),
-            child: Center(
-                child: Text(plusOneDay(day),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 19,
-                        color: Colors.white)))),
+        child: AnimatedScale(
+          scale: isSelectDay(day) ? 1.1 : 1.0,
+          curve: Curves.easeInOut,
+          duration: _animationController.duration!,
+          child: Container(
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                border: Border.all(color: Colors.grey),
+              ),
+              child: Center(
+                  child: Text(plusOneDay(day),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 19,
+                          color: textColor)))),
+        ),
       ),
     );
   }
 
-  Widget buildSelectDayBlock(int day) {
-    return Padding(
-      padding: const EdgeInsets.all(0.5),
-      child: InkWell(
-        child: Container(
-            decoration: BoxDecoration(
-              color: Colors.black,
-              border: Border.all(color: Colors.grey),
-            ),
-            child: Center(
-                child: Text(plusOneDay(day),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 19,
-                        color: Colors.white)))),
-      ),
-    );
+  void updateSelectedDay(int day) {
+    _animationController.forward(from: 0).then((value) {
+      BlocProvider.of<SelectDayBloc>(context).add(UpdateSelectDay(
+          DateTime.utc(_targetDayTime.year, _targetDayTime.month, day + 1)));
+      setState(() {
+        selectDay =
+            DateTime.utc(_targetDayTime.year, _targetDayTime.month, day + 1);
+      });
+    });
   }
 
-  Widget buildNotCurrentDayBlock(int day) {
-    return InkWell(
-      onTap: () {
-        BlocProvider.of<SelectDayBloc>(context).add(UpdateSelectDay(
-            DateTime.utc(_targetDayTime.year, _targetDayTime.month, day + 1)));
-        setState(() {
-          selectDay =
-              DateTime.utc(_targetDayTime.year, _targetDayTime.month, day + 1);
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(0.5),
-        child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-            ),
-            child: Center(child: Text(plusOneDay(day)))),
-      ),
-    );
+  bool has31Days() {
+    int month = _targetDayTime.month;
+    int year = _targetDayTime.year;
+    return (month <= 7 && month % 2 == 1) ||
+        (month >= 8 && month % 2 == 0) ||
+        (month == 2 && isLeapYear(year));
+  }
+
+  bool isLeapYear(int year) {
+    return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
   }
 
   String getMonthName(int month) {
-    String name = '';
     switch (month) {
       case 1:
-        name = 'Janeiro';
-        break;
+        return 'Janeiro';
       case 2:
-        name = 'Fevereiro';
-        break;
+        return 'Fevereiro';
       case 3:
-        name = 'Março';
-        break;
+        return 'Março';
       case 4:
-        name = 'Abril';
-        break;
+        return 'Abril';
       case 5:
-        name = 'Maio';
-        break;
+        return 'Maio';
       case 6:
-        name = 'Junho';
-        break;
+        return 'Junho';
       case 7:
-        name = 'Julho';
-        break;
+        return 'Julho';
       case 8:
-        name = 'Agosto';
-        break;
+        return 'Agosto';
       case 9:
-        name = 'Setembro';
-        break;
+        return 'Setembro';
       case 10:
-        name = 'Outubro';
-        break;
+        return 'Outubro';
       case 11:
-        name = 'Novembro';
-        break;
+        return 'Novembro';
       case 12:
-        name = 'Dezembro';
-        break;
+        return 'Dezembro';
+      default:
+        return 'Erro';
     }
-    return name;
   }
 }

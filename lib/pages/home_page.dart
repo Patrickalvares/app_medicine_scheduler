@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../bloc/select_day_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,40 +22,59 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               ' Remédiando',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontStyle: FontStyle.italic,
+              style: GoogleFonts.pacifico(
+                textStyle: TextStyle(
+                  fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  fontSize: 30),
+                  foreground: Paint()
+                    ..shader = LinearGradient(
+                      colors: <Color>[
+                        Colors.red.shade800,
+                        Colors.red.shade300,
+                        Colors.red.shade100
+                      ],
+                    ).createShader(
+                      Rect.fromLTWH(0.0, 0.0, 300.0, 100.0),
+                    ),
+                ),
+              ),
             ),
             IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (contextNew) => const MedicinesManagerPage(),
-                    ),
-                  );
-                },
-                icon: const Icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (contextNew) => const MedicinesManagerPage(),
+                  ),
+                );
+              },
+              icon: IconTheme(
+                data: IconThemeData(
+                  color: Theme.of(context).iconTheme.color,
+                ),
+                child: const Icon(
                   Icons.manage_accounts_rounded,
-                  color: Colors.black,
                   size: 35,
-                ))
+                ),
+              ),
+            )
           ],
         ),
       ),
       body: Column(
         children: [
+          Container(
+            height: 1, // Altura de 1 pixel para a linha
+            color: Colors.transparent, // Define a cor transparente
+          ),
           const MounthCalendar(),
           BlocBuilder(
             bloc: BlocProvider.of<SelectDayBloc>(context),
@@ -81,7 +101,10 @@ class _HomePageState extends State<HomePage> {
           );
         },
         backgroundColor: Colors.black,
-        child: const Icon(Icons.medication_rounded),
+        child: const Icon(
+          Icons.medication_rounded,
+          color: Colors.white,
+        ),
       ),
     );
   }

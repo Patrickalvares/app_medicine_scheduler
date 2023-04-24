@@ -57,13 +57,13 @@ class _MounthCalendarState extends State<MounthCalendar>
 
     do {
       Color? backgroundColor;
-      Color textColor = Colors.black;
+      Color textColor = Theme.of(context).textTheme.bodyText1!.color!;
 
       if (isSelectDay(i)) {
-        backgroundColor = Colors.black;
+        backgroundColor = Theme.of(context).primaryColor;
         textColor = Colors.white;
       } else if (isToday(i)) {
-        backgroundColor = Colors.grey[600];
+        backgroundColor = Color.fromARGB(255, 0, 0, 0);
         textColor = Colors.white;
       }
 
@@ -73,85 +73,104 @@ class _MounthCalendarState extends State<MounthCalendar>
 
     return Flexible(
       flex: (_targetDayTime.weekday == 6 || has31Days()) ? 4 : 3,
-      child: Container(
-        padding: const EdgeInsets.only(
-          left: 25,
-          right: 25,
-          top: 5,
-        ),
-        decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      targetMonthName,
-                      style: const TextStyle(fontSize: 25),
-                    ),
-                    Text(
-                      '${_targetDayTime.year}',
-                      style: const TextStyle(fontSize: 13),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          updateTargetDayTime(1);
-                        },
-                        icon: const Icon(Icons.arrow_back_ios_new_sharp)),
-                    IconButton(
-                        onPressed: () {
-                          updateTargetDayTime(-1);
-                        },
-                        icon: const Icon(Icons.arrow_forward_ios_sharp)),
-                    IconButton(
-                        onPressed: () {
-                          _targetDayTime = DateTime.utc(DateTime.now().year,
-                              DateTime.now().month, _targetDayTime.day);
-                          setState(() {});
-                        },
-                        icon: const Icon(Icons.replay_outlined)),
-                  ],
-                ),
-              ],
-            ),
-            Flexible(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 800),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  Offset beginOffset =
-                      getTransitionBeginOffset(_currentTransitionDirection);
-                  return SlideTransition(
-                    child: child,
-                    position:
-                        Tween<Offset>(begin: beginOffset, end: Offset(0.0, 0.0))
-                            .animate(animation),
-                  );
-                },
-                child: GridView.count(
-                  key: ValueKey<int>(_targetDayTime.month),
-                  primary: false,
-                  crossAxisCount: 7,
-                  children: days,
+      child: GestureDetector(
+        onHorizontalDragEnd: (details) {
+          if (details.primaryVelocity! > 0) {
+            updateTargetDayTime(-1);
+          } else if (details.primaryVelocity! < 0) {
+            updateTargetDayTime(1);
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.only(
+            left: 25,
+            right: 25,
+            top: 5,
+          ),
+          decoration: const BoxDecoration(
+            border: null,
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        targetMonthName,
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      Text(
+                        '${_targetDayTime.year}',
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            updateTargetDayTime(-1);
+                          },
+                          icon: const Icon(Icons.arrow_back_ios_sharp)),
+                      IconButton(
+                          onPressed: () {
+                            updateTargetDayTime(1);
+                          },
+                          icon: const Icon(Icons.arrow_forward_ios_sharp)),
+                      IconButton(
+                          onPressed: () {
+                            _targetDayTime = DateTime.utc(DateTime.now().year,
+                                DateTime.now().month, _targetDayTime.day);
+                            updateTargetDayTime(3);
+                            setState(() {});
+                          },
+                          icon: const Icon(Icons.replay_outlined)),
+                    ],
+                  ),
+                ],
+              ),
+              Flexible(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 800),
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                    Offset beginOffset =
+                        getTransitionBeginOffset(_currentTransitionDirection);
+                    return SlideTransition(
+                      child: child,
+                      position: Tween<Offset>(
+                              begin: beginOffset, end: Offset(0.0, 0.0))
+                          .animate(animation),
+                    );
+                  },
+                  child: GridView.count(
+                    key: ValueKey<int>(_targetDayTime.month),
+                    primary: false,
+                    crossAxisCount: 7,
+                    children: days,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 7),
-            Text(DateFormat('dd/MM/yyyy').format(selectDay)),
-          ],
+              const SizedBox(height: 7),
+              Text(DateFormat('dd/MM/yyyy').format(selectDay)),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Offset getTransitionBeginOffset(int direction) {
-    if (direction == -1) {
+    if (direction == 3) {
+      if (previousMonth > _targetDayTime.month) {
+        return const Offset(0.0, -3);
+      } else {
+        return const Offset(0.0, -3);
+      }
+    } else if (direction == -1) {
       if (previousMonth > _targetDayTime.month) {
         return const Offset(2.5, 0.0);
       } else {

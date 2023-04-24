@@ -43,6 +43,7 @@ dependencies:
   uuid: ^3.0.4
   sqflite: ^2.2.6
   flutter_local_notifications: ^13.0.0
+  google_fonts: ^4.0.3
   
 
 dev_dependencies:

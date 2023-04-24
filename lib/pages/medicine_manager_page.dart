@@ -18,11 +18,35 @@ class MedicinesManagerPage extends StatefulWidget {
   State<MedicinesManagerPage> createState() => _MedicinesManagerPageState();
 }
 
-class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
+class _MedicinesManagerPageState extends State<MedicinesManagerPage>
+    with SingleTickerProviderStateMixin {
+  late Animation<double> _animation;
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: MyApp.appGradient,
         ),
         child: Scaffold(
@@ -75,6 +99,7 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
                               border: Border.all(),
                               borderRadius: BorderRadius.circular(8)),
                           child: ExpansionTile(
+                            textColor: Colors.black,
                             controlAffinity: ListTileControlAffinity.leading,
                             title: Flexible(
                               child: Row(
@@ -101,51 +126,70 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage> {
                                           showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title:
-                                                    const Text('Confirmação'),
-                                                content: const Text(
-                                                    'Tem certeza que deseja deletar?'),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(context,
-                                                            'Cancelar'),
-                                                    child:
-                                                        const Text('Cancelar'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  MedicineBloc>(
-                                                              context)
-                                                          .add(
-                                                        RemoveMedicineEvent(
-                                                          medicine.medicine,
-                                                        ),
-                                                      );
-                                                      Navigator.pop(
-                                                          context, 'Deletar');
-                                                    },
-                                                    child:
-                                                        const Text('Deletar'),
-                                                  ),
-                                                ],
+                                              return FadeTransition(
+                                                opacity: _animation,
+                                                child: AlertDialog(
+                                                  title:
+                                                      const Text('Confirmação'),
+                                                  content: const Text(
+                                                      'Tem certeza que deseja deletar?'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(context,
+                                                              'Cancelar'),
+                                                      child: const Text(
+                                                          'Cancelar'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        BlocProvider.of<
+                                                                    MedicineBloc>(
+                                                                context)
+                                                            .add(
+                                                          RemoveMedicineEvent(
+                                                              medicine
+                                                                  .medicine),
+                                                        );
+                                                        Navigator.pop(
+                                                            context, 'Deletar');
+                                                      },
+                                                      child:
+                                                          const Text('Deletar'),
+                                                    ),
+                                                  ],
+                                                ),
                                               );
                                             },
                                           );
                                         },
                                       ),
                                       IconButton(
-                                        icon:
-                                            const Icon(Icons.edit_note_rounded),
+                                        icon: const AnimatedSwitcher(
+                                          duration:
+                                              Duration(milliseconds: 2000),
+                                          child: Icon(
+                                            Icons.edit_note_rounded,
+                                            key: ValueKey('edit_icon'),
+                                          ),
+                                        ),
                                         onPressed: () {
                                           Navigator.push(
                                             context,
-                                            MaterialPageRoute(
-                                              builder: (contextNew) =>
+                                            PageRouteBuilder(
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimation) =>
                                                   EditMedicine(
                                                       medicine.medicine),
+                                              transitionsBuilder: (context,
+                                                  animation,
+                                                  secondaryAnimation,
+                                                  child) {
+                                                return FadeTransition(
+                                                  opacity: animation,
+                                                  child: child,
+                                                );
+                                              },
                                             ),
                                           );
                                         },

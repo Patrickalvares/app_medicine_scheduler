@@ -1,4 +1,5 @@
 import 'package:app_medicine_scheduler/models/medicine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
@@ -55,7 +56,7 @@ class DatabaseHelper {
   Future<List<Medicine>> getMedicinesFromTable() async {
     var table = await queryAllRows();
     List<Medicine> ret = [];
-    table.forEach((element) {
+    for (var element in table) {
       if (element['periodicKind'] == 'Diariamente') {
         ret.add(DailyMedicine.fromMap(element));
       } else if (element['periodicKind'] == 'Semanalmente') {
@@ -67,14 +68,16 @@ class DatabaseHelper {
       } else if (element['periodicKind'] == 'Especifico') {
         ret.add(SpecificHoursMedicine.fromMap(element));
       }
-    });
+    }
     return ret;
   }
 
   Future<List<Map<String, dynamic>>> queryAllRows() async {
     final db = await getDb();
     var a = await db.query('medicines');
-    print(a);
+    if (kDebugMode) {
+      print(a);
+    }
     return a;
   }
 }

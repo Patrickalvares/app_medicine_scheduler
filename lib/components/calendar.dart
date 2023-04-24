@@ -63,7 +63,7 @@ class _MounthCalendarState extends State<MounthCalendar>
         backgroundColor = Theme.of(context).primaryColor;
         textColor = Colors.white;
       } else if (isToday(i)) {
-        backgroundColor = Color.fromARGB(255, 0, 0, 0);
+        backgroundColor = const Color.fromARGB(255, 0, 0, 0);
         textColor = Colors.white;
       }
 
@@ -124,7 +124,7 @@ class _MounthCalendarState extends State<MounthCalendar>
                           onPressed: () {
                             _targetDayTime = DateTime.utc(DateTime.now().year,
                                 DateTime.now().month, _targetDayTime.day);
-                            updateTargetDayTime(3);
+
                             setState(() {});
                           },
                           icon: const Icon(Icons.replay_outlined)),
@@ -140,10 +140,10 @@ class _MounthCalendarState extends State<MounthCalendar>
                     Offset beginOffset =
                         getTransitionBeginOffset(_currentTransitionDirection);
                     return SlideTransition(
-                      child: child,
                       position: Tween<Offset>(
-                              begin: beginOffset, end: Offset(0.0, 0.0))
+                              begin: beginOffset, end: const Offset(0.0, 0.0))
                           .animate(animation),
+                      child: child,
                     );
                   },
                   child: GridView.count(
@@ -164,13 +164,7 @@ class _MounthCalendarState extends State<MounthCalendar>
   }
 
   Offset getTransitionBeginOffset(int direction) {
-    if (direction == 3) {
-      if (previousMonth > _targetDayTime.month) {
-        return const Offset(0.0, -3);
-      } else {
-        return const Offset(0.0, -3);
-      }
-    } else if (direction == -1) {
+    if (direction == -1) {
       if (previousMonth > _targetDayTime.month) {
         return const Offset(2.5, 0.0);
       } else {

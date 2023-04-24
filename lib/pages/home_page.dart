@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
                         Colors.red.shade100
                       ],
                     ).createShader(
-                      Rect.fromLTWH(0.0, 0.0, 300.0, 100.0),
+                      const Rect.fromLTWH(0.0, 0.0, 300.0, 100.0),
                     ),
                 ),
               ),
@@ -51,29 +51,30 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (contextNew) => const MedicinesManagerPage(),
-                  ),
+                  _createRouteMedicinesManagerPage(),
                 );
               },
-              icon: IconTheme(
-                data: IconThemeData(
-                  color: Theme.of(context).iconTheme.color,
-                ),
-                child: const Icon(
-                  Icons.manage_accounts_rounded,
-                  size: 35,
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 2000),
+                child: IconTheme(
+                  data: IconThemeData(
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                  child: const Icon(
+                    Icons.manage_accounts_rounded,
+                    size: 35,
+                  ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
       body: Column(
         children: [
           Container(
-            height: 1, // Altura de 1 pixel para a linha
-            color: Colors.transparent, // Define a cor transparente
+            height: 1,
+            color: Colors.transparent,
           ),
           const MounthCalendar(),
           BlocBuilder(
@@ -95,17 +96,45 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (contextNew) => const NewMedicine(),
-            ),
+            _createRouteNewMedicine(),
           );
         },
         backgroundColor: Colors.black,
-        child: const Icon(
-          Icons.medication_rounded,
-          color: Colors.white,
+        child: const AnimatedSwitcher(
+          duration: Duration(milliseconds: 2000),
+          child: Icon(
+            Icons.medication_rounded,
+            color: Colors.white,
+            key: ValueKey('medicine_icon'),
+          ),
         ),
       ),
     );
   }
+}
+
+Route _createRouteNewMedicine() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        const NewMedicine(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  );
+}
+
+Route _createRouteMedicinesManagerPage() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        const MedicinesManagerPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  );
 }

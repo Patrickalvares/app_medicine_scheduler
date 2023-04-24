@@ -5,7 +5,8 @@ class NotificationManager {
       FlutterLocalNotificationsPlugin();
 
   static Future initialize() async {
-    var androidInitialze = AndroidInitializationSettings('mipmap/ic_launcher');
+    var androidInitialze =
+        const AndroidInitializationSettings('mipmap/ic_launcher');
 
     var initializationSettings =
         InitializationSettings(android: androidInitialze);
@@ -18,7 +19,7 @@ class NotificationManager {
       required String body,
       var payload}) async {
     AndroidNotificationDetails androidPlataformChannelSpecifics =
-        AndroidNotificationDetails(
+        const AndroidNotificationDetails(
             'Medicine_app_channel', 'Medicine_app_channel2',
             playSound: false,
             importance: Importance.max,

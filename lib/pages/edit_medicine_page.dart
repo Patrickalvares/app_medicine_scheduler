@@ -96,6 +96,7 @@ class _NewMedicineState extends State<EditMedicine> {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
+      // ignore: prefer_const_constructors
       decoration: BoxDecoration(
         gradient: MyApp.appGradient,
       ),

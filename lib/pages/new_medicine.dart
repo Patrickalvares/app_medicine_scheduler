@@ -63,9 +63,8 @@ class _NewMedicineState extends State<NewMedicine> {
       );
   @override
   Widget build(BuildContext context) {
-    ThemeData themeData = Theme.of(context);
     return DecoratedBox(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: MyApp.appGradient,
       ),
       child: Scaffold(

@@ -144,40 +144,70 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage>
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return FadeTransition(
-                                                  opacity: _animation,
-                                                  child: AlertDialog(
-                                                    title: const Text(
-                                                        'Confirmação'),
-                                                    content: const Text(
-                                                        'Tem certeza que deseja deletar?'),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () =>
+                                                    opacity: _animation,
+                                                    child: AlertDialog(
+                                                      backgroundColor:
+                                                          Colors.black,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        side: BorderSide(
+                                                            color: Colors
+                                                                .red.shade100,
+                                                            width: 2),
+                                                      ),
+                                                      title: Text(
+                                                        'Confirmação',
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .red.shade100),
+                                                      ),
+                                                      content: Text(
+                                                        'Tem certeza que deseja deletar?',
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .red.shade100),
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context,
+                                                                  'Cancelar'),
+                                                          child: Text(
+                                                            'Cancelar',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .red
+                                                                    .shade100),
+                                                          ),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            BlocProvider.of<
+                                                                        MedicineBloc>(
+                                                                    context)
+                                                                .add(
+                                                              RemoveMedicineEvent(
+                                                                  medicine
+                                                                      .medicine),
+                                                            );
                                                             Navigator.pop(
                                                                 context,
-                                                                'Cancelar'),
-                                                        child: const Text(
-                                                            'Cancelar'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      MedicineBloc>(
-                                                                  context)
-                                                              .add(
-                                                            RemoveMedicineEvent(
-                                                                medicine
-                                                                    .medicine),
-                                                          );
-                                                          Navigator.pop(context,
-                                                              'Deletar');
-                                                        },
-                                                        child: const Text(
-                                                            'Deletar'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                                'Deletar');
+                                                          },
+                                                          child: Text(
+                                                            'Deletar',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .red
+                                                                    .shade100),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ));
                                               },
                                             );
                                           },

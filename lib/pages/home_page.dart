@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app_medicine_scheduler/bloc/select_day_state.dart';
 import 'package:app_medicine_scheduler/components/calendar.dart';
 import 'package:app_medicine_scheduler/components/selected_day_medicines.dart';
@@ -16,8 +18,24 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   CalendarFormat calendarFormat = CalendarFormat.month;
+  late AnimationController _controller;
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +69,24 @@ class _HomePageState extends State<HomePage> {
             ),
             IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  _createRouteMedicinesManagerPage(),
-                );
+                _controller.forward().then((_) {
+                  _controller.reverse();
+                  Navigator.push(
+                    context,
+                    _createRouteMedicinesManagerPage(),
+                  );
+                });
               },
-              icon: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 2000),
+              icon: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  final angle = (_controller.value * 0.1) *
+                      (sin(_controller.value * pi) * 6);
+                  return Transform.rotate(
+                    angle: angle,
+                    child: child,
+                  );
+                },
                 child: IconTheme(
                   data: IconThemeData(
                     color: Theme.of(context).iconTheme.color,
@@ -99,18 +128,29 @@ class _HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.circular(36),
             side: BorderSide(color: Colors.red.shade100)),
         onPressed: () {
-          Navigator.push(
-            context,
-            _createRouteNewMedicine(),
-          );
+          _controller.forward().then((_) {
+            _controller.reverse();
+            Navigator.push(
+              context,
+              _createRouteNewMedicine(),
+            );
+          });
         },
         backgroundColor: Colors.black,
-        child: const AnimatedSwitcher(
-          duration: Duration(milliseconds: 2000),
-          child: Icon(
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            final angle =
+                (_controller.value * 0.3) * (sin(_controller.value * pi) * 2);
+            return Transform.rotate(
+              angle: angle,
+              child: child,
+            );
+          },
+          child: const Icon(
             Icons.medication_rounded,
             color: Color.fromARGB(255, 245, 150, 159),
-            key: ValueKey('medicine_icon'),
+            size: 35,
           ),
         ),
       ),

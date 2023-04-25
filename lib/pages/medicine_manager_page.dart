@@ -94,166 +94,198 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage>
                       return Padding(
                         padding: const EdgeInsets.only(
                             bottom: 5, top: 5, left: 10, right: 10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(8)),
-                          child: ExpansionTile(
-                            textColor: Colors.black,
-                            controlAffinity: ListTileControlAffinity.leading,
-                            title: Flexible(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Flexible(
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(medicine.medicine.name),
-                                        ]),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(DateFormat('HH:mm').format(
-                                          medicine.medicine.initialDate)),
-                                      IconButton(
-                                        icon: const Icon(Icons.delete),
-                                        onPressed: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return FadeTransition(
-                                                opacity: _animation,
-                                                child: AlertDialog(
-                                                  title:
-                                                      const Text('Confirmação'),
-                                                  content: const Text(
-                                                      'Tem certeza que deseja deletar?'),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(context,
-                                                              'Cancelar'),
-                                                      child: const Text(
-                                                          'Cancelar'),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        BlocProvider.of<
-                                                                    MedicineBloc>(
-                                                                context)
-                                                            .add(
-                                                          RemoveMedicineEvent(
-                                                              medicine
-                                                                  .medicine),
-                                                        );
-                                                        Navigator.pop(
-                                                            context, 'Deletar');
-                                                      },
-                                                      child:
-                                                          const Text('Deletar'),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: const AnimatedSwitcher(
-                                          duration:
-                                              Duration(milliseconds: 2000),
-                                          child: Icon(
-                                            Icons.edit_note_rounded,
-                                            key: ValueKey('edit_icon'),
+                        child: Theme(
+                          data: Theme.of(context).copyWith(
+                            textTheme: Theme.of(context).textTheme.apply(
+                                  bodyColor: Colors.red.shade100,
+                                  displayColor: Colors.red.shade100,
+                                ),
+                            iconTheme: Theme.of(context).iconTheme.copyWith(
+                                  color: Colors.red.shade100,
+                                ),
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                border: Border.all(color: Colors.red.shade100),
+                                borderRadius: BorderRadius.circular(8)),
+                            child: ExpansionTile(
+                              collapsedTextColor: Colors.red.shade100,
+                              iconColor: Colors.red.shade100,
+                              collapsedIconColor: Colors.red.shade100,
+                              textColor: Colors.red.shade100,
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Flexible(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(medicine.medicine.name),
+                                          ]),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(DateFormat('HH:mm').format(
+                                            medicine.medicine.initialDate)),
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.delete,
+                                            color: Colors.red.shade100,
                                           ),
-                                        ),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            PageRouteBuilder(
-                                              pageBuilder: (context, animation,
-                                                      secondaryAnimation) =>
-                                                  EditMedicine(
-                                                      medicine.medicine),
-                                              transitionsBuilder: (context,
-                                                  animation,
-                                                  secondaryAnimation,
-                                                  child) {
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
                                                 return FadeTransition(
-                                                  opacity: animation,
-                                                  child: child,
+                                                  opacity: _animation,
+                                                  child: AlertDialog(
+                                                    title: const Text(
+                                                        'Confirmação'),
+                                                    content: const Text(
+                                                        'Tem certeza que deseja deletar?'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context,
+                                                                'Cancelar'),
+                                                        child: const Text(
+                                                            'Cancelar'),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          BlocProvider.of<
+                                                                      MedicineBloc>(
+                                                                  context)
+                                                              .add(
+                                                            RemoveMedicineEvent(
+                                                                medicine
+                                                                    .medicine),
+                                                          );
+                                                          Navigator.pop(context,
+                                                              'Deletar');
+                                                        },
+                                                        child: const Text(
+                                                            'Deletar'),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 );
                                               },
+                                            );
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: AnimatedSwitcher(
+                                            duration:
+                                                Duration(milliseconds: 2000),
+                                            child: Icon(
+                                              Icons.edit_note_rounded,
+                                              color: Colors.red.shade100,
+                                              key: ValueKey(
+                                                'edit_icon',
+                                              ),
                                             ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 8.0, right: 8, left: 8),
-                                      child: RichText(
-                                        text: TextSpan(
-                                          style: const TextStyle(
-                                            color: Colors.black,
                                           ),
-                                          children: <TextSpan>[
-                                            const TextSpan(
-                                              text: 'Tipo Periódico:',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (context,
+                                                        animation,
+                                                        secondaryAnimation) =>
+                                                    EditMedicine(
+                                                        medicine.medicine),
+                                                transitionsBuilder: (context,
+                                                    animation,
+                                                    secondaryAnimation,
+                                                    child) {
+                                                  return FadeTransition(
+                                                    opacity: animation,
+                                                    child: child,
+                                                  );
+                                                },
                                               ),
-                                            ),
-                                            TextSpan(
-                                              text:
-                                                  ' ${medicine.medicine.periodicKind}',
-                                            ),
-                                          ],
+                                            );
+                                          },
                                         ),
-                                      )),
-                                  medicine.medicine.observation != ''
-                                      ? Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: RichText(
-                                            text: TextSpan(
-                                              style: const TextStyle(
-                                                color: Colors.black,
-                                              ),
-                                              children: <TextSpan>[
-                                                const TextSpan(
-                                                  text: 'Observação:',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              children: [
+                                Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 8.0, right: 8, left: 8),
+                                        child: RichText(
+                                          text: TextSpan(
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: 'Tipo Periódico:',
+                                                style: TextStyle(
+                                                  color: Colors.red.shade100,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
-                                                TextSpan(
+                                              ),
+                                              TextSpan(
                                                   text:
-                                                      ' ${medicine.medicine.observation}',
+                                                      ' ${medicine.medicine.periodicKind}',
+                                                  style: TextStyle(
+                                                      color:
+                                                          Colors.red.shade100)),
+                                            ],
+                                          ),
+                                        )),
+                                    medicine.medicine.observation != ''
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: RichText(
+                                              text: TextSpan(
+                                                style: const TextStyle(
+                                                  color: Colors.black,
                                                 ),
-                                              ],
-                                            ),
-                                          ))
-                                      : const Padding(
-                                          padding: EdgeInsets.all(4.0),
-                                          child: SizedBox(),
-                                        ),
-                                ],
-                              )
-                            ],
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                    text: 'Observação:',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors
+                                                            .red.shade100),
+                                                  ),
+                                                  TextSpan(
+                                                      text:
+                                                          ' ${medicine.medicine.observation}',
+                                                      style: TextStyle(
+                                                        color:
+                                                            Colors.red.shade100,
+                                                      )),
+                                                ],
+                                              ),
+                                            ))
+                                        : const Padding(
+                                            padding: EdgeInsets.all(4.0),
+                                            child: SizedBox(),
+                                          ),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       );

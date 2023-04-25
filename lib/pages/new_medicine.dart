@@ -15,6 +15,42 @@ class NewMedicine extends StatefulWidget {
 }
 
 class _NewMedicineState extends State<NewMedicine> {
+  final FocusNode _medicineNameFocus = FocusNode();
+  final FocusNode _dropdownFocus = FocusNode();
+  final FocusNode _periodicMedicineDaysFocus = FocusNode();
+  final FocusNode _medicineObservationFocus = FocusNode();
+  bool _initialDateSelected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _medicineNameFocus.addListener(_onFocusChange);
+    _dropdownFocus.addListener(_onDropdownFocusChange);
+    _periodicMedicineDaysFocus.addListener(_onFocusChange);
+    _medicineObservationFocus.addListener(_onFocusChange);
+  }
+
+  @override
+  void dispose() {
+    _medicineNameFocus.removeListener(_onFocusChange);
+    _periodicMedicineDaysFocus.removeListener(_onFocusChange);
+    _medicineNameFocus.dispose();
+    _periodicMedicineDaysFocus.dispose();
+    _dropdownFocus.removeListener(_onDropdownFocusChange);
+    _dropdownFocus.dispose();
+    _medicineObservationFocus.removeListener(_onFocusChange);
+    _medicineObservationFocus.dispose();
+    super.dispose();
+  }
+
+  void _onFocusChange() {
+    setState(() {});
+  }
+
+  void _onDropdownFocusChange() {
+    setState(() {});
+  }
+
   final _formkey = GlobalKey<FormState>();
   final TextEditingController _medicineName = TextEditingController();
   final TextEditingController _medicineObservation = TextEditingController();
@@ -29,6 +65,9 @@ class _NewMedicineState extends State<NewMedicine> {
   ];
 
   Future _openInitialDatePicker() async {
+    setState(() {
+      _initialDateSelected = _initialDate.text.isNotEmpty;
+    });
     DateTime? date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -53,9 +92,24 @@ class _NewMedicineState extends State<NewMedicine> {
       return;
     }
     TimeOfDay? time = await showTimePicker(
-        context: context,
-        initialTime: const TimeOfDay(hour: 18, minute: 0),
-        initialEntryMode: TimePickerEntryMode.input);
+      context: context,
+      initialTime: const TimeOfDay(hour: 18, minute: 0),
+      initialEntryMode: TimePickerEntryMode.input,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: Colors.red.shade100,
+              onPrimary: Colors.black,
+              surface: Colors.black,
+              onSurface: Colors.red.shade100,
+            ),
+            dialogBackgroundColor: Colors.black,
+          ),
+          child: child!,
+        );
+      },
+    );
     if (time == null) {
       return;
     }
@@ -108,7 +162,7 @@ class _NewMedicineState extends State<NewMedicine> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 8.0, right: 8, top: 3, bottom: 20),
+                      left: 8.0, right: 8, top: 10, bottom: 20),
                   child: TextFormField(
                     maxLength: 40,
                     validator: (value) {
@@ -119,16 +173,26 @@ class _NewMedicineState extends State<NewMedicine> {
                       }
                     },
                     decoration: InputDecoration(
-                        counterText: "",
-                        labelText: 'Nome do Medicamento',
-                        labelStyle: TextStyle(
-                            color: Colors.red.shade100,
-                            fontWeight: FontWeight.bold),
-                        fillColor: Colors.black,
-                        filled: true,
-                        border: const OutlineInputBorder()),
+                      counterText: "",
+                      labelText: 'Nome do Medicamento',
+                      labelStyle: TextStyle(
+                        color: _medicineNameFocus.hasFocus ||
+                                _medicineName.text.isNotEmpty
+                            ? Theme.of(context).primaryColor
+                            : Colors.red.shade100,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      fillColor: Colors.black,
+                      filled: true,
+                      border: const OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                    ),
                     controller: _medicineName,
-                    style: const TextStyle(fontSize: 22, color: Colors.white),
+                    focusNode: _medicineNameFocus,
+                    style: TextStyle(fontSize: 22, color: Colors.red.shade100),
                   ),
                 ),
                 Padding(
@@ -139,7 +203,13 @@ class _NewMedicineState extends State<NewMedicine> {
                       fillColor: Colors.black,
                       filled: true,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4)),
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(
+                          color: _dropdownFocus.hasFocus
+                              ? Theme.of(context).primaryColor
+                              : Colors.transparent,
+                        ),
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -150,17 +220,24 @@ class _NewMedicineState extends State<NewMedicine> {
                     hint: Text(
                       '  Qual a frequência de uso?',
                       style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.red.shade100,
-                          fontWeight: FontWeight.bold),
+                        fontSize: 22,
+                        color: _dropdownFocus.hasFocus
+                            ? Theme.of(context).primaryColor
+                            : Colors.red.shade100,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
+                    focusNode: _dropdownFocus,
                     items: dropDownItems
                         .map((item) => DropdownMenuItem<String>(
                               value: item,
-                              child: Text(item,
-                                  style: TextStyle(
-                                      color: Colors.red.shade100,
-                                      fontWeight: FontWeight.bold)),
+                              child: Text(
+                                item,
+                                style: TextStyle(
+                                  color: Colors.red.shade100,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ))
                         .toList(),
                     onChanged: ((value) =>
@@ -191,15 +268,22 @@ class _NewMedicineState extends State<NewMedicine> {
                         filled: true,
                         labelText: 'Quantos dias:',
                         labelStyle: TextStyle(
-                            color: Colors.red.shade100,
-                            fontWeight: FontWeight.bold),
+                          color: _periodicMedicineDaysFocus.hasFocus ||
+                                  _periodicMedicineDays.text.isNotEmpty
+                              ? Theme.of(context).primaryColor
+                              : Colors.red.shade100,
+                          fontWeight: FontWeight.bold,
+                        ),
                         border: const OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Theme.of(context).primaryColor),
+                        ),
                       ),
                       controller: _periodicMedicineDays,
-                      style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.red.shade100,
-                          fontWeight: FontWeight.bold),
+                      focusNode: _periodicMedicineDaysFocus,
+                      style:
+                          TextStyle(fontSize: 22, color: Colors.red.shade100),
                     ),
                   ),
                 ),
@@ -231,13 +315,20 @@ class _NewMedicineState extends State<NewMedicine> {
                     readOnly: true,
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
-                          fontSize: 22,
-                          color: Colors.red.shade100,
-                          fontWeight: FontWeight.bold),
+                        fontSize: 22,
+                        color: _initialDateSelected
+                            ? Theme.of(context).primaryColor
+                            : Colors.red.shade100,
+                        fontWeight: FontWeight.bold,
+                      ),
                       labelText: 'Dia e Hora Inicial',
                       fillColor: Colors.black,
                       filled: true,
                       border: const OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      ),
                     ),
                     controller: _initialDate,
                     style: TextStyle(
@@ -253,18 +344,24 @@ class _NewMedicineState extends State<NewMedicine> {
                     decoration: InputDecoration(
                       labelText: 'Observação',
                       labelStyle: TextStyle(
-                          fontSize: 22,
-                          color: Colors.red.shade100,
-                          fontWeight: FontWeight.bold),
+                        fontSize: 22,
+                        color: _medicineObservationFocus.hasFocus ||
+                                _medicineObservation.text.isNotEmpty
+                            ? Theme.of(context).primaryColor
+                            : Colors.red.shade100,
+                        fontWeight: FontWeight.bold,
+                      ),
                       fillColor: Colors.black,
                       filled: true,
                       border: const OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      ),
                     ),
                     controller: _medicineObservation,
-                    style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.red.shade100,
-                        fontWeight: FontWeight.bold),
+                    focusNode: _medicineObservationFocus,
+                    style: TextStyle(fontSize: 22, color: Colors.red.shade100),
                   ),
                 ),
                 Center(

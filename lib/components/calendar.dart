@@ -57,14 +57,14 @@ class _MounthCalendarState extends State<MounthCalendar>
 
     do {
       Color? backgroundColor;
-      Color textColor = Theme.of(context).textTheme.bodyText1!.color!;
+      Color textColor = Theme.of(context).textTheme.bodyLarge!.color!;
 
       if (isSelectDay(i)) {
         backgroundColor = Theme.of(context).primaryColor;
         textColor = Colors.white;
       } else if (isToday(i)) {
         backgroundColor = const Color.fromARGB(255, 0, 0, 0);
-        textColor = Colors.white;
+        textColor = Colors.red.shade100;
       }
 
       days.add(buildDayContainer(i, backgroundColor, textColor));
@@ -100,11 +100,11 @@ class _MounthCalendarState extends State<MounthCalendar>
                     children: [
                       Text(
                         targetMonthName,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       Text(
                         '${_targetDayTime.year}',
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],
                   ),
@@ -199,8 +199,8 @@ class _MounthCalendarState extends State<MounthCalendar>
         ),
         child: Center(
             child: Text(weekDayName,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.white))));
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.red.shade100))));
   }
 
   List<Widget> buildEmptyDates(int p) {

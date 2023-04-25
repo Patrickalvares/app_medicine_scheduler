@@ -30,10 +30,25 @@ class _NewMedicineState extends State<NewMedicine> {
 
   Future _openInitialDatePicker() async {
     DateTime? date = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2999));
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2999),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: Colors.red.shade100,
+              onPrimary: Colors.black,
+              surface: Colors.black,
+              onSurface: Colors.red.shade100,
+            ),
+            dialogBackgroundColor: Colors.black,
+          ),
+          child: child!,
+        );
+      },
+    );
     if (date == null) {
       return;
     }
@@ -103,12 +118,17 @@ class _NewMedicineState extends State<NewMedicine> {
                         return null;
                       }
                     },
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                         counterText: "",
-                        label: Text('Nome do Medicamento'),
-                        border: OutlineInputBorder()),
+                        labelText: 'Nome do Medicamento',
+                        labelStyle: TextStyle(
+                            color: Colors.red.shade100,
+                            fontWeight: FontWeight.bold),
+                        fillColor: Colors.black,
+                        filled: true,
+                        border: const OutlineInputBorder()),
                     controller: _medicineName,
-                    style: const TextStyle(fontSize: 22),
+                    style: const TextStyle(fontSize: 22, color: Colors.white),
                   ),
                 ),
                 Padding(
@@ -116,6 +136,8 @@ class _NewMedicineState extends State<NewMedicine> {
                       left: 8.0, right: 8, top: 3, bottom: 20),
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
+                      fillColor: Colors.black,
+                      filled: true,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(4)),
                     ),
@@ -125,15 +147,29 @@ class _NewMedicineState extends State<NewMedicine> {
                       }
                       return null;
                     },
-                    hint: const Text(
+                    hint: Text(
                       '  Qual a frequência de uso?',
-                      style: TextStyle(fontSize: 22),
+                      style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.red.shade100,
+                          fontWeight: FontWeight.bold),
                     ),
-                    items: dropDownItems.map(buildMenuItem).toList(),
+                    items: dropDownItems
+                        .map((item) => DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item,
+                                  style: TextStyle(
+                                      color: Colors.red.shade100,
+                                      fontWeight: FontWeight.bold)),
+                            ))
+                        .toList(),
                     onChanged: ((value) =>
                         setState(() => _recurrenceTypevalue = value)),
                     value: _recurrenceTypevalue,
                     isExpanded: true,
+                    dropdownColor: Colors.black,
+                    iconEnabledColor: Colors.white,
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
                 Visibility(
@@ -150,11 +186,20 @@ class _NewMedicineState extends State<NewMedicine> {
                         }
                       },
                       keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
-                          label: Text('Quantos dias:'),
-                          border: OutlineInputBorder()),
+                      decoration: InputDecoration(
+                        fillColor: Colors.black,
+                        filled: true,
+                        labelText: 'Quantos dias:',
+                        labelStyle: TextStyle(
+                            color: Colors.red.shade100,
+                            fontWeight: FontWeight.bold),
+                        border: const OutlineInputBorder(),
+                      ),
                       controller: _periodicMedicineDays,
-                      style: const TextStyle(fontSize: 22),
+                      style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.red.shade100,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -184,13 +229,20 @@ class _NewMedicineState extends State<NewMedicine> {
                     enableSuggestions: true,
                     cursorHeight: 34,
                     readOnly: true,
-                    decoration: const InputDecoration(
-                        label: Text(
-                          'Dia e Hora Inicial',
-                          style: TextStyle(fontSize: 22),
-                        ),
-                        border: OutlineInputBorder()),
+                    decoration: InputDecoration(
+                      labelStyle: TextStyle(
+                          fontSize: 22,
+                          color: Colors.red.shade100,
+                          fontWeight: FontWeight.bold),
+                      labelText: 'Dia e Hora Inicial',
+                      fillColor: Colors.black,
+                      filled: true,
+                      border: const OutlineInputBorder(),
+                    ),
                     controller: _initialDate,
+                    style: TextStyle(
+                        color: Colors.red.shade100,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 Padding(
@@ -198,15 +250,28 @@ class _NewMedicineState extends State<NewMedicine> {
                       left: 8.0, right: 8, top: 3, bottom: 20),
                   child: TextFormField(
                     maxLength: 200,
-                    decoration: const InputDecoration(
-                        label: Text('Observação'),
-                        border: OutlineInputBorder()),
+                    decoration: InputDecoration(
+                      labelText: 'Observação',
+                      labelStyle: TextStyle(
+                          fontSize: 22,
+                          color: Colors.red.shade100,
+                          fontWeight: FontWeight.bold),
+                      fillColor: Colors.black,
+                      filled: true,
+                      border: const OutlineInputBorder(),
+                    ),
                     controller: _medicineObservation,
-                    style: const TextStyle(fontSize: 22),
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.red.shade100,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 Center(
                   child: FloatingActionButton.extended(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(36),
+                        side: BorderSide(color: Colors.red.shade100)),
                     backgroundColor: Colors.black,
                     onPressed: () {
                       if (_formkey.currentState!.validate()) {
@@ -290,14 +355,14 @@ class _NewMedicineState extends State<NewMedicine> {
                     label: Padding(
                       padding: const EdgeInsets.only(left: 25, right: 25),
                       child: Row(
-                        children: const [
+                        children: [
                           Icon(
                             Icons.save,
-                            color: Colors.white,
+                            color: Colors.red.shade100,
                           ),
                           Text(
                             ' Salvar',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.red.shade100),
                           ),
                         ],
                       ),

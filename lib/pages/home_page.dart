@@ -36,6 +36,8 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.bold,
                   foreground: Paint()
                     ..shader = LinearGradient(
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
                       colors: <Color>[
                         Colors.red.shade800,
                         Colors.red.shade300,
@@ -93,6 +95,9 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(36),
+            side: BorderSide(color: Colors.red.shade100)),
         onPressed: () {
           Navigator.push(
             context,
@@ -104,7 +109,7 @@ class _HomePageState extends State<HomePage> {
           duration: Duration(milliseconds: 2000),
           child: Icon(
             Icons.medication_rounded,
-            color: Colors.white,
+            color: Color.fromARGB(255, 245, 150, 159),
             key: ValueKey('medicine_icon'),
           ),
         ),

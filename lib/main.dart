@@ -29,9 +29,9 @@ class MyApp extends StatelessWidget {
     begin: Alignment.topLeft,
     end: Alignment.bottomCenter,
     colors: [
-      Color.fromARGB(255, 255, 255, 255),
-      Color.fromARGB(255, 239, 248, 247),
-      Color.fromARGB(255, 122, 255, 242),
+      Color.fromARGB(255, 249, 255, 227),
+      Color.fromARGB(255, 241, 191, 191),
+      Color.fromARGB(255, 189, 85, 85),
     ],
   );
 
@@ -40,15 +40,23 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        inputDecorationTheme: const InputDecorationTheme(
+          focusColor:
+              Color.fromARGB(255, 241, 191, 191), // Substitua pela cor desejada
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: Color.fromARGB(255, 241, 191, 191),
+                width: 1.0), // Substitua pela cor desejada
+          ),
+        ),
         primaryColor: const Color(0xFF4DB6AC),
-        backgroundColor: const Color(0xFFE0F2F1),
         fontFamily: 'Roboto',
         textTheme: const TextTheme(
-          headline1: TextStyle(
+          displayLarge: TextStyle(
               fontSize: 36.0, fontWeight: FontWeight.bold, color: Colors.black),
-          headline2: TextStyle(
+          displayMedium: TextStyle(
               fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.black),
-          bodyText1: TextStyle(
+          bodyLarge: TextStyle(
               fontSize: 14.0,
               fontWeight: FontWeight.normal,
               color: Colors.black),
@@ -62,8 +70,10 @@ class MyApp extends StatelessWidget {
           color: Colors.black,
         ),
         scaffoldBackgroundColor: Colors.transparent,
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-            secondary: const Color(0xFF81C784)), // Adicione esta linha
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: const Color(0xFF81C784))
+            .copyWith(
+                background: const Color(0xFFE0F2F1)), // Adicione esta linha
       ),
       // ignore: prefer_const_constructors
       home: GradientBackground(gradient: appGradient, child: const HomePage()),

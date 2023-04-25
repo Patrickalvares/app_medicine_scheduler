@@ -2,69 +2,120 @@ import 'package:app_medicine_scheduler/models/medicine.dart';
 import 'package:flutter/material.dart';
 
 Widget periodicMedicinePreview(PeriodicMedicine medicine) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Container(
-      decoration: BoxDecoration(
-          border: Border.all(), borderRadius: BorderRadius.circular(5)),
-      child: Padding(
-        padding: const EdgeInsets.all(14.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
+  return Card(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    elevation: 3,
+    child: Padding(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                medicine.name,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              Icon(
+                medicine.active ? Icons.check_circle : Icons.cancel,
+                color: medicine.active ? Colors.green : Colors.red,
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              const Icon(Icons.calendar_today),
+              const SizedBox(width: 5),
+              Text(
+                "${medicine.initialDate.day}/${medicine.initialDate.month}/${medicine.initialDate.year}",
+              ),
+            ],
+          ),
+          const SizedBox(height: 5),
+          Row(
+            children: [
+              const Icon(Icons.timer),
+              const SizedBox(width: 5),
+              Text('${medicine.period.inHours.toString()} Horas'),
+              const Text(' | '),
+              Text('${medicine.period.inDays.toString()} Dias'),
+            ],
+          ),
+          if (medicine.observation?.isNotEmpty ?? false) ...[
+            const SizedBox(height: 5),
+            Row(
               children: [
-                Text(medicine.name),
-                Text(
-                  "${medicine.initialDate.day}/${medicine.initialDate.month}/${medicine.initialDate.year}",
-                ),
-              ],
-            ),
-            Text((medicine.active ? "Ativo" : "Inativo")),
-            Column(
-              children: [
-                Text('${medicine.period.inHours.toString()} Horas'),
-                Text('${medicine.period.inDays.toString()} Dias'),
-                Text(medicine.observation ?? ""),
+                const Icon(Icons.comment),
+                const SizedBox(width: 5),
+                Expanded(child: Text(medicine.observation.toString())),
               ],
             )
-          ],
-        ),
+          ]
+        ],
       ),
     ),
   );
 }
 
-Widget standartMedicinePreview(medicine) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Container(
-      decoration: BoxDecoration(
-          border: Border.all(), borderRadius: BorderRadius.circular(5)),
-      child: Padding(
-        padding: const EdgeInsets.all(14.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              children: [
-                Text(medicine.name),
-                Text(
-                  "${medicine.initialDate.day}/${medicine.initialDate.month}/${medicine.initialDate.year}",
-                ),
-                Text(medicine.observation ?? ""),
+Widget standardMedicinePreview(Medicine medicine) {
+  return Card(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    elevation: 3,
+    child: Padding(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                medicine.name,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              Icon(
+                medicine.active ? Icons.check_circle : Icons.cancel,
+                color: medicine.active ? Colors.green : Colors.red,
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              const Icon(Icons.calendar_today),
+              const SizedBox(width: 5),
+              Text(
+                "${medicine.initialDate.day}/${medicine.initialDate.month}/${medicine.initialDate.year}",
+              ),
+            ],
+          ),
+          const SizedBox(height: 5),
+          Row(
+            children: [
+              const Icon(Icons.repeat),
+              const SizedBox(width: 5),
+              if (medicine is DailyMedicine) ...[
+                const Text('Diariamente')
+              ] else if (medicine is WeeklyMedicine) ...[
+                const Text('Semanalmente')
+              ] else if (medicine is MonthlyMedicine) ...[
+                const Text('Mensalmente')
               ],
-            ),
-            Text((medicine.active ? "Ativo" : "Inativo")),
-            if (medicine is DailyMedicine) ...[
-              const Text('Diariamente')
-            ] else if (medicine is WeeklyMedicine) ...[
-              const Text('Semanalmente')
-            ] else if (medicine is MonthlyMedicine) ...[
-              const Text('Mensalmente')
-            ]
-          ],
-        ),
+            ],
+          ),
+          if (medicine.observation?.isNotEmpty ?? false) ...[
+            const SizedBox(height: 5),
+            Row(
+              children: [
+                const Icon(Icons.comment),
+                const SizedBox(width: 5),
+                Expanded(child: Text(medicine.observation.toString())),
+              ],
+            )
+          ]
+        ],
       ),
     ),
   );

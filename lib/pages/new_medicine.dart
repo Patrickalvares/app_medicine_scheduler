@@ -160,9 +160,20 @@ class _NewMedicineState extends State<NewMedicine> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const Padding(
+                  padding: EdgeInsets.only(
+                    left: 10.0,
+                    right: 8,
+                    top: 10,
+                  ),
+                  child: Text(
+                    'Nome do Medicamento:',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 8.0, right: 8, top: 10, bottom: 20),
+                      left: 8.0, right: 8, top: 8, bottom: 10),
                   child: TextFormField(
                     maxLength: 40,
                     validator: (value) {
@@ -174,14 +185,6 @@ class _NewMedicineState extends State<NewMedicine> {
                     },
                     decoration: InputDecoration(
                       counterText: "",
-                      labelText: 'Nome do Medicamento',
-                      labelStyle: TextStyle(
-                        color: _medicineNameFocus.hasFocus ||
-                                _medicineName.text.isNotEmpty
-                            ? Theme.of(context).primaryColor
-                            : Colors.red.shade100,
-                        fontWeight: FontWeight.bold,
-                      ),
                       fillColor: Colors.black,
                       filled: true,
                       border: const OutlineInputBorder(),
@@ -194,6 +197,12 @@ class _NewMedicineState extends State<NewMedicine> {
                     focusNode: _medicineNameFocus,
                     style: TextStyle(fontSize: 22, color: Colors.red.shade100),
                   ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 10.0, right: 8, top: 10),
+                  child: Text('Frequência de uso:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -217,16 +226,6 @@ class _NewMedicineState extends State<NewMedicine> {
                       }
                       return null;
                     },
-                    hint: Text(
-                      '  Qual a frequência de uso?',
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: _dropdownFocus.hasFocus
-                            ? Theme.of(context).primaryColor
-                            : Colors.red.shade100,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                     focusNode: _dropdownFocus,
                     items: dropDownItems
                         .map((item) => DropdownMenuItem<String>(
@@ -245,48 +244,53 @@ class _NewMedicineState extends State<NewMedicine> {
                     value: _recurrenceTypevalue,
                     isExpanded: true,
                     dropdownColor: Colors.black,
-                    iconEnabledColor: Colors.white,
+                    iconEnabledColor: Colors.red.shade100,
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),
                 Visibility(
-                  visible: (_recurrenceTypevalue == ' A cada __ dias'),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8.0, right: 8, top: 3, bottom: 20),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (int.tryParse(value!) is! int) {
-                          return "Somente números";
-                        } else {
-                          return null;
-                        }
-                      },
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        fillColor: Colors.black,
-                        filled: true,
-                        labelText: 'Quantos dias:',
-                        labelStyle: TextStyle(
-                          color: _periodicMedicineDaysFocus.hasFocus ||
-                                  _periodicMedicineDays.text.isNotEmpty
-                              ? Theme.of(context).primaryColor
-                              : Colors.red.shade100,
-                          fontWeight: FontWeight.bold,
+                    visible: (_recurrenceTypevalue == ' A cada __ dias'),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            left: 10.0,
+                            right: 8,
+                          ),
+                          child: Text('Quantos dias:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
                         ),
-                        border: const OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Theme.of(context).primaryColor),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8, top: 3, bottom: 20),
+                          child: TextFormField(
+                            validator: (value) {
+                              if (int.tryParse(value!) is! int) {
+                                return "Somente números";
+                              } else {
+                                return null;
+                              }
+                            },
+                            keyboardType: TextInputType.phone,
+                            decoration: InputDecoration(
+                              fillColor: Colors.black,
+                              filled: true,
+                              border: const OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                            ),
+                            controller: _periodicMedicineDays,
+                            focusNode: _periodicMedicineDaysFocus,
+                            style: TextStyle(
+                                fontSize: 22, color: Colors.red.shade100),
+                          ),
                         ),
-                      ),
-                      controller: _periodicMedicineDays,
-                      focusNode: _periodicMedicineDaysFocus,
-                      style:
-                          TextStyle(fontSize: 22, color: Colors.red.shade100),
-                    ),
-                  ),
-                ),
+                      ],
+                    )),
                 Visibility(
                     visible: (_recurrenceTypevalue == ' A cada __ horas'),
                     child: TimePickerSpinner(
@@ -299,6 +303,15 @@ class _NewMedicineState extends State<NewMedicine> {
                         });
                       },
                     )),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    left: 10.0,
+                    right: 8,
+                  ),
+                  child: Text('Dia e Hora Inicial:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 8.0, right: 8, top: 3, bottom: 20),
@@ -314,14 +327,6 @@ class _NewMedicineState extends State<NewMedicine> {
                     cursorHeight: 34,
                     readOnly: true,
                     decoration: InputDecoration(
-                      labelStyle: TextStyle(
-                        fontSize: 22,
-                        color: _initialDateSelected
-                            ? Theme.of(context).primaryColor
-                            : Colors.red.shade100,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      labelText: 'Dia e Hora Inicial',
                       fillColor: Colors.black,
                       filled: true,
                       border: const OutlineInputBorder(),
@@ -336,21 +341,18 @@ class _NewMedicineState extends State<NewMedicine> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 10.0, right: 8),
+                  child: Text('Observação:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 8.0, right: 8, top: 3, bottom: 20),
                   child: TextFormField(
                     maxLength: 200,
                     decoration: InputDecoration(
-                      labelText: 'Observação',
-                      labelStyle: TextStyle(
-                        fontSize: 22,
-                        color: _medicineObservationFocus.hasFocus ||
-                                _medicineObservation.text.isNotEmpty
-                            ? Theme.of(context).primaryColor
-                            : Colors.red.shade100,
-                        fontWeight: FontWeight.bold,
-                      ),
                       fillColor: Colors.black,
                       filled: true,
                       border: const OutlineInputBorder(),

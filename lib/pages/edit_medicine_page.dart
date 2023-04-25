@@ -65,17 +65,47 @@ class _NewMedicineState extends State<EditMedicine> {
 
   Future _openInitialDatePicker() async {
     DateTime? date = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2999));
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2999),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: Colors.red.shade100,
+              onPrimary: Colors.black,
+              surface: Colors.black,
+              onSurface: Colors.red.shade100,
+            ),
+            dialogBackgroundColor: Colors.black,
+          ),
+          child: child!,
+        );
+      },
+    );
     if (date == null) {
       return;
     }
     TimeOfDay? time = await showTimePicker(
-        context: context,
-        initialTime: const TimeOfDay(hour: 18, minute: 0),
-        initialEntryMode: TimePickerEntryMode.input);
+      context: context,
+      initialTime: const TimeOfDay(hour: 18, minute: 0),
+      initialEntryMode: TimePickerEntryMode.input,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: Colors.red.shade100,
+              onPrimary: Colors.black,
+              surface: Colors.black,
+              onSurface: Colors.red.shade100,
+            ),
+            dialogBackgroundColor: Colors.black,
+          ),
+          child: child!,
+        );
+      },
+    );
     if (time == null) {
       return;
     }
@@ -124,6 +154,17 @@ class _NewMedicineState extends State<EditMedicine> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const Padding(
+                  padding: EdgeInsets.only(
+                    left: 10.0,
+                    right: 8,
+                    top: 10,
+                  ),
+                  child: Text(
+                    'Nome do Medicamento:',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 8.0, right: 8, top: 3, bottom: 20),
@@ -136,21 +177,42 @@ class _NewMedicineState extends State<EditMedicine> {
                         return null;
                       }
                     },
-                    decoration: const InputDecoration(
-                        counterText: "",
-                        label: Text('Nome do Medicamento'),
-                        border: OutlineInputBorder()),
+                    decoration: InputDecoration(
+                      counterText: "",
+                      fillColor: Colors.black,
+                      filled: true,
+                      border: const OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                    ),
                     controller: _medicineName,
-                    style: const TextStyle(fontSize: 22),
+                    style: TextStyle(fontSize: 22, color: Colors.red.shade100),
                   ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    left: 10.0,
+                    right: 8,
+                  ),
+                  child: Text('Frequência de uso:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 8.0, right: 8, top: 3, bottom: 20),
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
+                      fillColor: Colors.black,
+                      filled: true,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4)),
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                        ),
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -162,33 +224,62 @@ class _NewMedicineState extends State<EditMedicine> {
                       '  Qual a frequência de uso?',
                       style: TextStyle(fontSize: 22),
                     ),
-                    items: dropDownItems.map(buildMenuItem).toList(),
+                    items: dropDownItems
+                        .map((item) => DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                item,
+                                style: TextStyle(
+                                  color: Colors.red.shade100,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ))
+                        .toList(),
                     onChanged: ((value) =>
                         setState(() => _recurrenceTypevalue = value)),
                     value: _recurrenceTypevalue,
                     isExpanded: true,
+                    dropdownColor: Colors.black,
+                    iconEnabledColor: Colors.red.shade100,
                   ),
                 ),
                 Visibility(
                   visible: (_recurrenceTypevalue == 'A cada __ dias'),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8.0, right: 8, top: 3, bottom: 20),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (int.tryParse(value!) is! int) {
-                          return "Somente números";
-                        } else {
-                          return null;
-                        }
-                      },
-                      keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
-                          label: Text('Quantos dias:'),
-                          border: OutlineInputBorder()),
-                      controller: _periodicMedicineDays,
-                      style: const TextStyle(fontSize: 22),
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: 10.0,
+                          right: 8,
+                        ),
+                        child: Text('Quantos dias:',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8.0, right: 8, top: 3, bottom: 20),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (int.tryParse(value!) is! int) {
+                              return "Somente números";
+                            } else {
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.phone,
+                          decoration: const InputDecoration(
+                              fillColor: Colors.black,
+                              filled: true,
+                              border: OutlineInputBorder()),
+                          controller: _periodicMedicineDays,
+                          style: TextStyle(
+                              fontSize: 22, color: Colors.red.shade100),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Visibility(
@@ -204,6 +295,15 @@ class _NewMedicineState extends State<EditMedicine> {
                       },
                     )),
                 Padding(
+                  padding: EdgeInsets.only(
+                    left: 10.0,
+                    right: 8,
+                  ),
+                  child: Text('Dia e Hora Inicial:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                ),
+                Padding(
                   padding: const EdgeInsets.only(
                       left: 8.0, right: 8, top: 3, bottom: 20),
                   child: TextFormField(
@@ -212,13 +312,20 @@ class _NewMedicineState extends State<EditMedicine> {
                     cursorHeight: 34,
                     readOnly: true,
                     decoration: const InputDecoration(
-                        label: Text(
-                          'Dia e Hora Inicial',
-                          style: TextStyle(fontSize: 22),
-                        ),
+                        fillColor: Colors.black,
+                        filled: true,
                         border: OutlineInputBorder()),
                     controller: _initialDate,
+                    style: TextStyle(
+                        color: Colors.red.shade100,
+                        fontWeight: FontWeight.bold),
                   ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10.0, right: 8),
+                  child: Text('Observação:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -226,14 +333,18 @@ class _NewMedicineState extends State<EditMedicine> {
                   child: TextFormField(
                     maxLength: 200,
                     decoration: const InputDecoration(
-                        label: Text('Observação'),
+                        fillColor: Colors.black,
+                        filled: true,
                         border: OutlineInputBorder()),
                     controller: _medicineObservation,
-                    style: const TextStyle(fontSize: 22),
+                    style: TextStyle(fontSize: 22, color: Colors.red.shade100),
                   ),
                 ),
                 Center(
                   child: FloatingActionButton.extended(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(36),
+                        side: BorderSide(color: Colors.red.shade100)),
                     backgroundColor: Colors.black,
                     onPressed: () {
                       if (_formkey.currentState!.validate()) {
@@ -307,12 +418,13 @@ class _NewMedicineState extends State<EditMedicine> {
                     label: Padding(
                       padding: const EdgeInsets.only(left: 25, right: 25),
                       child: Row(
-                        children: const [
+                        children: [
                           Icon(
                             Icons.save,
-                            color: Colors.white,
+                            color: Colors.red.shade100,
                           ),
-                          Text(' Salvar'),
+                          Text(' Salvar',
+                              style: TextStyle(color: Colors.red.shade100)),
                         ],
                       ),
                     ),

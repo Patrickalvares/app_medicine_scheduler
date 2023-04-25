@@ -72,7 +72,7 @@ class _MounthCalendarState extends State<MounthCalendar>
     } while (int.parse(plusOneDay(i)) > 1);
 
     return Flexible(
-      flex: (_targetDayTime.weekday == 6 || has31Days()) ? 4 : 3,
+      flex: (_targetDayTime.weekday == 6 || has31Days()) ? 5 : 5,
       child: GestureDetector(
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity! > 0) {
@@ -155,7 +155,23 @@ class _MounthCalendarState extends State<MounthCalendar>
                 ),
               ),
               const SizedBox(height: 7),
-              Text(DateFormat('dd/MM/yyyy').format(selectDay)),
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(36),
+                    border: Border.all(color: Colors.red.shade100)),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 8, bottom: 8, right: 12, left: 12),
+                  child: Text(
+                    DateFormat('dd/MM/yyyy').format(selectDay),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.red.shade100),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

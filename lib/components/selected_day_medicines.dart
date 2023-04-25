@@ -140,7 +140,8 @@ class _SelectedDayMedicinesState extends State<SelectedDayMedicines> {
                               decoration: BoxDecoration(
                                   color: const Color.fromARGB(255, 0, 0, 0),
                                   border: Border.all(
-                                    color: Colors.red.shade300,
+                                    color: const Color.fromARGB(
+                                        255, 245, 150, 159),
                                   ),
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(

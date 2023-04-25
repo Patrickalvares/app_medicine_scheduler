@@ -184,12 +184,12 @@ class _MedicinesManagerPageState extends State<MedicinesManagerPage>
                                         ),
                                         IconButton(
                                           icon: AnimatedSwitcher(
-                                            duration:
-                                                Duration(milliseconds: 2000),
+                                            duration: const Duration(
+                                                milliseconds: 2000),
                                             child: Icon(
                                               Icons.edit_note_rounded,
                                               color: Colors.red.shade100,
-                                              key: ValueKey(
+                                              key: const ValueKey(
                                                 'edit_icon',
                                               ),
                                             ),

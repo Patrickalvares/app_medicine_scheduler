@@ -36,12 +36,12 @@ class _MounthCalendarState extends State<MounthCalendar>
 
     _leftArrowAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 400),
     );
 
     _rightArrowAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 400),
     );
 
     _rotateArrowAnimationController = AnimationController(
@@ -152,7 +152,17 @@ class _MounthCalendarState extends State<MounthCalendar>
                         builder: (context, child) {
                           return Transform.translate(
                             offset: Offset(
-                                -10 * _leftArrowAnimationController.value, 0),
+                                TweenSequence<double>([
+                                  TweenSequenceItem<double>(
+                                    tween: Tween<double>(begin: 0, end: -10),
+                                    weight: 50,
+                                  ),
+                                  TweenSequenceItem<double>(
+                                    tween: Tween<double>(begin: -10, end: 0),
+                                    weight: 50,
+                                  ),
+                                ]).evaluate(_leftArrowAnimationController),
+                                0),
                             child: child,
                           );
                         },
@@ -166,7 +176,17 @@ class _MounthCalendarState extends State<MounthCalendar>
                         builder: (context, child) {
                           return Transform.translate(
                             offset: Offset(
-                                10 * _rightArrowAnimationController.value, 0),
+                                TweenSequence<double>([
+                                  TweenSequenceItem<double>(
+                                    tween: Tween<double>(begin: 0, end: 10),
+                                    weight: 50,
+                                  ),
+                                  TweenSequenceItem<double>(
+                                    tween: Tween<double>(begin: 10, end: 0),
+                                    weight: 50,
+                                  ),
+                                ]).evaluate(_rightArrowAnimationController),
+                                0),
                             child: child,
                           );
                         },

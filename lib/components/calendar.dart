@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app_medicine_scheduler/bloc/select_day_bloc.dart';
 import 'package:app_medicine_scheduler/bloc/select_day_event.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +14,14 @@ class MounthCalendar extends StatefulWidget {
 }
 
 class _MounthCalendarState extends State<MounthCalendar>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   DateTime _targetDayTime =
       DateTime.utc(DateTime.now().year, DateTime.now().month, 01);
   late DateTime selectDay = DateTime.now();
   late AnimationController _animationController;
+  late AnimationController _leftArrowAnimationController;
+  late AnimationController _rightArrowAnimationController;
+  late AnimationController _rotateArrowAnimationController;
 
   int previousMonth = DateTime.now().month;
   int _currentTransitionDirection = 1;
@@ -28,6 +33,21 @@ class _MounthCalendarState extends State<MounthCalendar>
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
+
+    _leftArrowAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _rightArrowAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _rotateArrowAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
   }
 
   @override
@@ -37,6 +57,23 @@ class _MounthCalendarState extends State<MounthCalendar>
   }
 
   @override
+  void onLeftArrowPressed() {
+    updateTargetDayTime(-1);
+    _leftArrowAnimationController.forward(from: 0);
+  }
+
+  void onRightArrowPressed() {
+    updateTargetDayTime(1);
+    _rightArrowAnimationController.forward(from: 0);
+  }
+
+  void onRotateArrowPressed() {
+    _targetDayTime = DateTime.utc(
+        DateTime.now().year, DateTime.now().month, _targetDayTime.day);
+    setState(() {});
+    _rotateArrowAnimationController.forward(from: 0);
+  }
+
   Widget build(BuildContext context) {
     String targetMonthName = getMonthName(_targetDayTime.month);
 
@@ -110,24 +147,48 @@ class _MounthCalendarState extends State<MounthCalendar>
                   ),
                   Row(
                     children: [
-                      IconButton(
-                          onPressed: () {
-                            updateTargetDayTime(-1);
-                          },
-                          icon: const Icon(Icons.arrow_back_ios_sharp)),
-                      IconButton(
-                          onPressed: () {
-                            updateTargetDayTime(1);
-                          },
-                          icon: const Icon(Icons.arrow_forward_ios_sharp)),
-                      IconButton(
-                          onPressed: () {
-                            _targetDayTime = DateTime.utc(DateTime.now().year,
-                                DateTime.now().month, _targetDayTime.day);
-
-                            setState(() {});
-                          },
-                          icon: const Icon(Icons.replay_outlined)),
+                      AnimatedBuilder(
+                        animation: _leftArrowAnimationController,
+                        builder: (context, child) {
+                          return Transform.translate(
+                            offset: Offset(
+                                -10 * _leftArrowAnimationController.value, 0),
+                            child: child,
+                          );
+                        },
+                        child: IconButton(
+                          onPressed: onLeftArrowPressed,
+                          icon: const Icon(Icons.arrow_back_ios_sharp),
+                        ),
+                      ),
+                      AnimatedBuilder(
+                        animation: _rightArrowAnimationController,
+                        builder: (context, child) {
+                          return Transform.translate(
+                            offset: Offset(
+                                10 * _rightArrowAnimationController.value, 0),
+                            child: child,
+                          );
+                        },
+                        child: IconButton(
+                          onPressed: onRightArrowPressed,
+                          icon: const Icon(Icons.arrow_forward_ios_sharp),
+                        ),
+                      ),
+                      AnimatedBuilder(
+                        animation: _rotateArrowAnimationController,
+                        builder: (context, child) {
+                          return Transform.rotate(
+                            angle:
+                                -2 * pi * _rotateArrowAnimationController.value,
+                            child: child,
+                          );
+                        },
+                        child: IconButton(
+                          onPressed: onRotateArrowPressed,
+                          icon: const Icon(Icons.replay_outlined),
+                        ),
+                      ),
                     ],
                   ),
                 ],

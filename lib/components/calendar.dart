@@ -56,7 +56,6 @@ class _MounthCalendarState extends State<MounthCalendar>
     super.dispose();
   }
 
-  @override
   void onLeftArrowPressed() {
     updateTargetDayTime(-1);
     _leftArrowAnimationController.forward(from: 0);
@@ -74,6 +73,7 @@ class _MounthCalendarState extends State<MounthCalendar>
     _rotateArrowAnimationController.forward(from: 0);
   }
 
+  @override
   Widget build(BuildContext context) {
     String targetMonthName = getMonthName(_targetDayTime.month);
 
@@ -108,8 +108,8 @@ class _MounthCalendarState extends State<MounthCalendar>
       i++;
     } while (int.parse(plusOneDay(i)) > 1);
 
-    return Flexible(
-      flex: (_targetDayTime.weekday == 6 || has31Days()) ? 5 : 5,
+    return SizedBox(
+      height: 430,
       child: GestureDetector(
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity! > 0) {

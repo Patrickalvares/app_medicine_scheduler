@@ -87,6 +87,7 @@ class _NewMedicineState extends State<EditMedicine> {
     if (date == null) {
       return;
     }
+    // ignore: use_build_context_synchronously
     TimeOfDay? time = await showTimePicker(
       context: context,
       initialTime: const TimeOfDay(hour: 18, minute: 0),
@@ -209,7 +210,7 @@ class _NewMedicineState extends State<EditMedicine> {
                       filled: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.transparent,
                         ),
                       ),
@@ -249,7 +250,7 @@ class _NewMedicineState extends State<EditMedicine> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(
                           left: 10.0,
                           right: 8,
@@ -294,7 +295,7 @@ class _NewMedicineState extends State<EditMedicine> {
                         });
                       },
                     )),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(
                     left: 10.0,
                     right: 8,
@@ -321,7 +322,7 @@ class _NewMedicineState extends State<EditMedicine> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(left: 10.0, right: 8),
                   child: Text('Observação:',
                       style:

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:intl/intl.dart';
+import 'package:app_medicine_scheduler/tools/notifications.dart';
 
 class NewMedicine extends StatefulWidget {
   const NewMedicine({super.key});
@@ -19,7 +20,6 @@ class _NewMedicineState extends State<NewMedicine> {
   final FocusNode _dropdownFocus = FocusNode();
   final FocusNode _periodicMedicineDaysFocus = FocusNode();
   final FocusNode _medicineObservationFocus = FocusNode();
-  bool _initialDateSelected = false;
 
   @override
   void initState() {
@@ -65,9 +65,7 @@ class _NewMedicineState extends State<NewMedicine> {
   ];
 
   Future _openInitialDatePicker() async {
-    setState(() {
-      _initialDateSelected = _initialDate.text.isNotEmpty;
-    });
+    setState(() {});
     DateTime? date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -91,6 +89,7 @@ class _NewMedicineState extends State<NewMedicine> {
     if (date == null) {
       return;
     }
+    // ignore: use_build_context_synchronously
     TimeOfDay? time = await showTimePicker(
       context: context,
       initialTime: const TimeOfDay(hour: 18, minute: 0),
@@ -446,6 +445,7 @@ class _NewMedicineState extends State<NewMedicine> {
                             throw Exception(
                                 "Erro na seleção do tipo de Frequência");
                         }
+
                         BlocProvider.of<MedicineBloc>(context)
                             .add(AddMedicineEvent(medicine));
                         Navigator.pop(context);

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:app_medicine_scheduler/bloc/select_day_bloc.dart';
 import 'package:app_medicine_scheduler/bloc/select_day_event.dart';
+import 'package:app_medicine_scheduler/tools/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -66,7 +67,14 @@ class _MounthCalendarState extends State<MounthCalendar>
     _rightArrowAnimationController.forward(from: 0);
   }
 
-  void onRotateArrowPressed() {
+  void onRotateArrowPressed() async {
+    await NotificationManager.showPeriodicLocalNotification(
+      id: 1,
+      title: "Drink Water",
+      body: "Time to drink some water!",
+      payload: "You just took water! Huurray!",
+    );
+
     _targetDayTime = DateTime.utc(
         DateTime.now().year, DateTime.now().month, _targetDayTime.day);
     setState(() {});

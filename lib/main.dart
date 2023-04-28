@@ -41,12 +41,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         inputDecorationTheme: const InputDecorationTheme(
-          focusColor:
-              Color.fromARGB(255, 241, 191, 191), // Substitua pela cor desejada
+          focusColor: Color.fromARGB(255, 241, 191, 191),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-                color: Color.fromARGB(255, 241, 191, 191),
-                width: 1.0), // Substitua pela cor desejada
+                color: Color.fromARGB(255, 241, 191, 191), width: 1.0),
           ),
         ),
         primaryColor: const Color(0xFF4DB6AC),

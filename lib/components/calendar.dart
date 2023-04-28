@@ -304,8 +304,10 @@ class _MounthCalendarState extends State<MounthCalendar>
         ),
         child: Center(
             child: Text(weekDayName,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.red.shade100))));
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 249, 223, 223),
+                ))));
   }
 
   List<Widget> buildEmptyDates(int p) {

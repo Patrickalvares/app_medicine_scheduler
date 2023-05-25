@@ -68,13 +68,6 @@ class _MounthCalendarState extends State<MounthCalendar>
   }
 
   void onRotateArrowPressed() async {
-    await NotificationManager.showPeriodicLocalNotification(
-      id: 1,
-      title: "Drink Water",
-      body: "Time to drink some water!",
-      payload: "You just took water! Huurray!",
-    );
-
     _targetDayTime = DateTime.utc(
         DateTime.now().year, DateTime.now().month, _targetDayTime.day);
     setState(() {});
@@ -244,20 +237,30 @@ class _MounthCalendarState extends State<MounthCalendar>
                 ),
               ),
               const SizedBox(height: 7),
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(36),
-                    border: Border.all(color: Colors.red.shade100)),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 8, bottom: 8, right: 12, left: 12),
-                  child: Text(
-                    DateFormat('dd/MM/yyyy').format(selectDay),
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.red.shade100),
+              GestureDetector(
+                onTap: () async {
+                  await NotificationService.showNotification(
+                    title: 'titulo test',
+                    body: 'malhado',
+                    interval: 61,
+                    scheduled: true,
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(36),
+                      border: Border.all(color: Colors.red.shade100)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 8, bottom: 8, right: 12, left: 12),
+                    child: Text(
+                      DateFormat('dd/MM/yyyy').format(selectDay),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colors.red.shade100),
+                    ),
                   ),
                 ),
               ),

@@ -139,9 +139,9 @@ class _NewMedicineState extends State<NewMedicine> {
           iconTheme: const IconThemeData(color: Colors.black),
           elevation: 0,
           backgroundColor: Colors.transparent,
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text(
                 'Adicionar Medicamento',
                 style: TextStyle(

@@ -1,97 +1,107 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:timezone/data/latest_all.dart' as timezone;
-import 'package:timezone/timezone.dart' as timezone;
 
-class NotificationManager {
-  static final _localNotifications = FlutterLocalNotificationsPlugin();
-  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  static final BehaviorSubject<String> behaviorSubject = BehaviorSubject();
-
-  static Future initialize() async {
-    timezone.initializeTimeZones();
-    timezone.setLocalLocation(
-      timezone.getLocation(
-        await FlutterNativeTimezone.getLocalTimezone(),
-      ),
+class NotificationService {
+  static Future<void> initializeNotification() async {
+    await AwesomeNotifications().initialize(
+      null,
+      [
+        NotificationChannel(
+          channelGroupKey: 'canal_muito_importante',
+          channelKey: 'canal_muito_importante',
+          channelName: 'Notificação Basica',
+          channelDescription: 'Canal de Notificação para testes basicos',
+          defaultColor: Colors.black,
+          ledColor: Colors.white,
+          importance: NotificationImportance.Max,
+          channelShowBadge: true,
+          onlyAlertOnce: true,
+          playSound: true,
+          criticalAlerts: true,
+        ),
+      ],
+      channelGroups: [
+        NotificationChannelGroup(
+            channelGroupKey: 'canal_muito_importante',
+            channelGroupName: 'Grupo 1'),
+      ],
+      debug: true,
     );
+    await AwesomeNotifications()
+        .isNotificationAllowed()
+        .then((isAllowed) async {
+      if (!isAllowed) {
+        await AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
 
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-    flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestPermission();
-    WidgetsFlutterBinding.ensureInitialized();
-
-    NotificationManager.initialize();
-
-    var androidInitialze =
-        const AndroidInitializationSettings('mipmap/ic_launcher');
-
-    var initializationSettings =
-        InitializationSettings(android: androidInitialze);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  }
-
-  static Future showNotification(
-      {var id = 0,
-      required String title,
-      required String body,
-      var payload}) async {
-    AndroidNotificationDetails androidPlataformChannelSpecifics =
-        const AndroidNotificationDetails(
-            'Medicine_app_channel', 'Medicine_app_channel2',
-            playSound: false,
-            importance: Importance.max,
-            priority: Priority.high);
-
-    var not = NotificationDetails(android: androidPlataformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(0, title, body, not);
-  }
-
-  static Future<NotificationDetails> _notificationDetails() async {
-    AndroidNotificationDetails androidPlatformChannelSpecifics =
-        const AndroidNotificationDetails(
-      'channel id',
-      'channel name',
-      groupKey: 'com.example.flutter_push_notifications',
-      channelDescription: 'channel description',
-      importance: Importance.max,
-      priority: Priority.max,
-      playSound: true,
-      ticker: 'ticker',
-      color: Color(0xff2196f3),
+    await AwesomeNotifications().setListeners(
+      onActionReceivedMethod: onActionReceivedMethod,
+      onNotificationCreatedMethod: onNotificationCreatedMethod,
+      onNotificationDisplayedMethod: onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod: onDismissActionReceivedMethod,
     );
-
-    final details = await _localNotifications.getNotificationAppLaunchDetails();
-    if (details != null && details.didNotificationLaunchApp) {
-      behaviorSubject.add(details.notificationResponse!.payload!);
-    }
-    NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    return platformChannelSpecifics;
   }
 
-  static Future<void> showPeriodicLocalNotification({
-    required int id,
-    required String title,
-    required String body,
-    required String payload,
+  static Future<void> onNotificationCreatedMethod(
+      ReceivedNotification receivedNotification) async {
+    debugPrint('onNotificationCreatedMethod');
+  }
+
+  static Future<void> onNotificationDisplayedMethod(
+      ReceivedNotification receivedNotification) async {
+    debugPrint('onNotificationDisplayedMethod');
+  }
+
+  static Future<void> onDismissActionReceivedMethod(
+      ReceivedAction receivedAction) async {
+    debugPrint('onDismissActionReceivedMethod');
+  }
+
+  static Future<void> onActionReceivedMethod(
+      ReceivedAction receivedAction) async {
+    debugPrint('onActionReceivedMethod');
+    final payload = receivedAction.payload ?? {};
+  }
+
+  static Future<void> showNotification({
+    required final String title,
+    required final String body,
+    final String? summary,
+    final Map<String, String>? payload,
+    final ActionType actionType = ActionType.Default,
+    final NotificationLayout notificationLayout = NotificationLayout.Default,
+    final NotificationCategory? category,
+    final String? bigPicture,
+    final List<NotificationActionButton>? actionButtons,
+    final bool scheduled = false,
+    final int? interval,
   }) async {
-    final platformChannelSpecifics = await _notificationDetails();
-    await _localNotifications.periodicallyShow(
-      id,
-      title,
-      body,
-      RepeatInterval.everyMinute,
-      platformChannelSpecifics,
-      payload: payload,
-      androidAllowWhileIdle: true,
+    assert(!scheduled || (scheduled && interval != null));
+
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: -1,
+        channelKey: 'canal_muito_importante',
+        title: title,
+        body: body,
+        actionType: actionType,
+        notificationLayout: notificationLayout,
+        summary: summary,
+        category: category,
+        payload: payload,
+        bigPicture: bigPicture,
+      ),
+      actionButtons: actionButtons,
+      schedule: scheduled
+          ? NotificationInterval(
+              interval: interval,
+              timeZone:
+                  await AwesomeNotifications().getLocalTimeZoneIdentifier(),
+              preciseAlarm: true,
+              repeats: true,
+              allowWhileIdle: true)
+          : null,
     );
   }
 }

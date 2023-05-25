@@ -42,11 +42,11 @@ dependencies:
   flutter_time_picker_spinner: ^2.0.0
   uuid: ^3.0.4
   sqflite: ^2.2.6
-  flutter_local_notifications: ^13.0.0
   google_fonts: ^4.0.3
   flutter_slidable: ^3.0.0
   flutter_native_timezone: ^2.0.0
   rxdart: ^0.27.7
+  awesome_notifications: ^0.7.4+1
   
 
 dev_dependencies:

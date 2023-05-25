@@ -8,9 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  NotificationManager.initialize();
-
+  await NotificationService.initializeNotification();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MultiBlocProvider(providers: [

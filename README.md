@@ -1,16 +1,37 @@
-# app_medicine_scheduler
+# 🩺 Remediando - Gerenciador de Medicamentos 💊
 
-A new Flutter project.
 
-## Getting Started
+## 📖 Descrição
 
-This project is a starting point for a Flutter application.
+**Remediando** é um aplicativo Flutter desenvolvido com o propósito de estudo e prática. Ele oferece uma plataforma intuitiva para gerenciar medicamentos, permitindo aos usuários visualizar, adicionar e editar registros de medicamentos com facilidade.
 
-A few resources to get you started if this is your first Flutter project:
+## 🌟 Funcionalidades
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- 📅 Visualização diária de medicamentos.
+- ➕ Adição de novos medicamentos com detalhes.
+- 📝 Edição de medicamentos existentes.
+- 🔄 Gestão de medicamentos com banco de dados SQLite.
+- 🚀 Arquitetura BLoC para uma gestão de estado eficiente.
+- 🎨 Design intuitivo e amigável.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠 Tecnologias e Pacotes
+
+- [Flutter](https://flutter.dev/)
+- BLoC para gerenciamento de estado.
+- SQLite para persistência de dados.
+- Animated Text Kit para animações de texto.
+
+## 🚀 Como Rodar
+
+1. Clone este repositório.
+2. Navegue até a pasta do projeto e execute `flutter pub get` para instalar as dependências.
+3. Execute `flutter run` para iniciar o aplicativo em um emulador ou dispositivo físico.
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes. Todos os recursos são de uso livre e foram utilizados para fins de estudo.
+
+## 🤝 Contribuições
+
+Este é um projeto aberto para fins educacionais. Sinta-se à vontade para contribuir com melhorias, correções de bugs ou novas funcionalidades! Todas as contribuições são bem-vindas. 😊
+
